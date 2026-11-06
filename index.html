@@ -1,0 +1,1439 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Belajar fotografi interaktif: segitiga exposure, lensa dan jarak, serta cahaya studio 3D.">
+<meta name="theme-color" content="#eef0ec" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#151815" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Lab Foto">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<title>Lab Fotografi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=IBM+Plex+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;600&display=swap">
+<style>
+/* Layout: tab bar lengket di atas, dua modul (Dasar hijau, Lanjut oranye) berbagi token warna dan huruf yang sama */
+:root{
+  --bg:#eef0ec; --surface:#ffffff; --ink:#1c211d; --muted:#5d665f; --line:#d3d8d1;
+  --accent:#d9481c; --ok:#2f8a4e; --warn:#c48a0e;
+  --vf:#121412; --vf-ink:#e9eee6; --vf-mute:#9aa49c;
+  --key:#e8751a; --fill:#2f7fe0; --back:#9a5be0;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Plus Jakarta Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#151815; --surface:#1e221f; --ink:#e7ece5; --muted:#9aa49c; --line:#323832;
+  --accent:#ff6a3d; --ok:#5cc47f; --warn:#e8b13a;
+  --key:#ff9a3c; --fill:#5aa2ff; --back:#b68cff; color-scheme:dark}
+}
+:root[data-theme="dark"]{
+  --bg:#151815; --surface:#1e221f; --ink:#e7ece5; --muted:#9aa49c; --line:#323832;
+  --accent:#ff6a3d; --ok:#5cc47f; --warn:#e8b13a;
+  --key:#ff9a3c; --fill:#5aa2ff; --back:#b68cff; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+#tab-light .wrap{max-width:1040px;margin:0 auto;padding-block:20px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;gap:28px}
+#tab-light h1{font-family:var(--display);font-weight:800;font-size:clamp(28px,6vw,44px);line-height:1.05;margin:0;text-wrap:balance}
+#tab-light h1 em{font-style:normal;color:var(--accent)}
+#tab-light h2{font-family:var(--display);font-weight:800;font-size:22px;margin:0;text-wrap:balance}
+#tab-light h3{font-family:var(--display);font-weight:800;font-size:17px;margin:0}
+#tab-light .lead{color:var(--muted);max-width:62ch;margin:6px 0 0}
+#tab-light .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+#tab-light .note{font-size:13px;color:var(--muted);margin:0;max-width:65ch}
+#tab-light .steps{display:flex;flex-wrap:wrap;gap:8px 22px;margin:14px 0 0;padding:0;list-style:none;counter-reset:s;font-weight:600}
+#tab-light .steps li{counter-increment:s;display:flex;gap:8px;align-items:center}
+#tab-light .steps li::before{content:counter(s);font-family:var(--mono);font-size:12px;width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center}
+#tab-light button:focus-visible,#tab-light input:focus-visible,#tab-light [tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#tab-light .gallery{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+@media (max-width:900px){#tab-light .gallery{grid-template-columns:repeat(3,1fr)}
+}
+#tab-light .pick{background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:6px;font:inherit;color:var(--ink);cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:6px;min-width:0}
+#tab-light .pick[aria-pressed="true"]{border-color:var(--accent)}
+#tab-light .pick canvas{width:100%;height:auto;display:block;border-radius:7px;background:var(--vf);aspect-ratio:3/4}
+#tab-light .pick b{font-family:var(--display);font-size:15px;padding:0 2px}
+#tab-light .pick span{font-size:12px;color:var(--muted);padding:0 2px 4px;line-height:1.35}
+#tab-light .lab{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:18px;align-items:start}
+@media (max-width:820px){#tab-light .lab{grid-template-columns:1fr}
+}
+@media (min-width:821px){#tab-light .vf{position:sticky;top:12px}
+}
+#tab-light .vf{background:var(--vf);border-radius:14px;padding:12px;color:var(--vf-ink);min-width:0;display:flex;flex-direction:column;gap:12px}
+#tab-light .vf canvas{display:block;width:100%;max-width:460px;margin:0 auto;height:auto;aspect-ratio:3/4;border-radius:8px}
+#tab-light .nogl{padding:40px 16px;text-align:center;color:var(--vf-mute)}
+#tab-light .hud{display:flex;flex-direction:column;gap:6px;padding:2px 4px 4px}
+#tab-light .hud .pat{font-family:var(--display);font-weight:800;font-size:20px}
+#tab-light .hud .ratio{font-family:var(--mono);font-size:13px}
+#tab-light .hud .tip{font-size:13px;color:var(--vf-mute);max-width:60ch}
+#tab-light .col{display:flex;flex-direction:column;gap:14px;min-width:0}
+#tab-light .panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0}
+#tab-light .plan{width:100%;max-width:340px;margin:0 auto;display:block;touch-action:none;user-select:none}
+#tab-light .plan text{font-family:var(--mono);fill:var(--muted);font-size:10px}
+#tab-light .plan .ring{fill:none;stroke:var(--line);stroke-dasharray:3 4}
+#tab-light .plan g[data-l]{cursor:grab}
+#tab-light .plan g[data-l]:active{cursor:grabbing}
+#tab-light .plan .dotl{font-size:12px;font-weight:600;fill:#fff;text-anchor:middle}
+#tab-light .lcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+#tab-light .lhead{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start}
+#tab-light .lhead .dot{width:14px;height:14px;border-radius:50%;margin-top:4px}
+#tab-light .lhead p{margin:0}
+#tab-light .sw{display:flex;gap:6px;align-items:center;font-size:13px;cursor:pointer}
+#tab-light .sw input{accent-color:var(--accent);width:18px;height:18px}
+#tab-light .dial{display:flex;flex-direction:column;gap:2px}
+#tab-light .dial .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+#tab-light .dial label,#tab-light .dial .lb{font-weight:600;font-size:14px}
+#tab-light .dial .val{font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums}
+#tab-light input[type=range]{width:100%;accent-color:var(--accent)}
+#tab-light .chips{display:flex;flex-wrap:wrap;gap:6px}
+#tab-light .chips button{font:inherit;font-size:13px;padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+#tab-light .chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+#tab-light .lcard.off .dial,#tab-light .lcard.off .chips{opacity:.45}
+
+@media (prefers-color-scheme:dark){}
+#tab-exp .wrap{max-width:1000px;margin:0 auto;padding-block:20px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;gap:26px}
+#tab-exp h1{font-family:var(--display);font-weight:800;font-size:clamp(28px,6vw,44px);line-height:1.05;margin:0;text-wrap:balance}
+#tab-exp h1 em{font-style:normal;color:var(--accent)}
+#tab-exp h2{font-family:var(--display);font-weight:800;font-size:22px;margin:0;text-wrap:balance}
+#tab-exp h3{font-family:var(--display);font-weight:800;font-size:18px;margin:0}
+#tab-exp .lead{color:var(--muted);max-width:62ch;margin:6px 0 0}
+#tab-exp .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+#tab-exp .note{font-size:13px;color:var(--muted);margin:0;max-width:65ch}
+#tab-exp button:focus-visible,#tab-exp input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#tab-exp .top{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;align-items:start}
+@media (max-width:760px){#tab-exp .top{grid-template-columns:1fr}
+}
+@media (min-width:761px){#tab-exp .vf{position:sticky;top:12px}
+}
+#tab-exp .vf{background:var(--vf);border-radius:14px;padding:12px;color:var(--vf-ink);min-width:0}
+#tab-exp .vf canvas{display:block;width:100%;height:auto;border-radius:6px;aspect-ratio:3/2}
+#tab-exp .hud{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:13px;padding:10px 4px 2px}
+#tab-exp .hud b{font-weight:600}
+#tab-exp .meter{display:flex;align-items:flex-end;gap:2px}
+#tab-exp .meter span{width:8px;height:8px;background:#3a3f3a;border-radius:1px}
+#tab-exp .meter span.mid{height:14px}
+#tab-exp .meter span.on{background:#ff6a3d}
+#tab-exp .meter span.mid.on{background:#5cc47f}
+#tab-exp .panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:16px;min-width:0}
+#tab-exp .chips{display:flex;flex-wrap:wrap;gap:6px}
+#tab-exp .chips button{font:inherit;font-size:13px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+#tab-exp .chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+#tab-exp .sep{border:0;border-top:1px solid var(--line);margin:0}
+#tab-exp .dial{display:flex;flex-direction:column;gap:4px}
+#tab-exp .dial .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+#tab-exp .dial label{font-weight:600}
+#tab-exp .dial .val{font-family:var(--mono);font-size:18px;font-weight:600;font-variant-numeric:tabular-nums}
+#tab-exp .dial.auto .val::after{content:"AUTO";font-size:10px;letter-spacing:.1em;margin-left:8px;padding:2px 6px;border-radius:4px;background:var(--accent);color:var(--surface);vertical-align:3px}
+#tab-exp .dial .hint{font-size:12.5px;color:var(--muted)}
+#tab-exp .fx{display:flex;align-items:center;gap:8px;font-size:12.5px}
+#tab-exp .fx .bars{display:flex;gap:3px;flex:none}
+#tab-exp .fx .bars i{display:block;width:14px;height:5px;border-radius:2px;background:var(--line)}
+#tab-exp .fx .bars i.on{background:var(--accent)}
+#tab-exp input[type=range]{width:100%;accent-color:var(--accent)}
+#tab-exp input[type=range]:disabled{opacity:.45}
+#tab-exp .verdict{font-family:var(--display);font-size:22px;font-weight:800}
+#tab-exp .verdict small{display:block;font-family:var(--body);font-size:13px;font-weight:400;color:var(--muted)}
+#tab-exp .mid{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start}
+@media (max-width:760px){#tab-exp .mid{grid-template-columns:1fr}
+}
+#tab-exp .tri{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px}
+#tab-exp .tri svg{width:100%;height:auto;display:block}
+#tab-exp .tri text{font-family:var(--mono);fill:var(--ink)}
+#tab-exp .notes{display:flex;flex-direction:column;gap:10px;min-width:0}
+#tab-exp .notes p{margin:0;max-width:65ch}
+#tab-exp .rule{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:14px;margin:0}
+#tab-exp .rule dt{font-family:var(--mono);font-weight:600}
+#tab-exp .rule dd{margin:0;color:var(--muted)}
+#tab-exp .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media (max-width:860px){#tab-exp .cards{grid-template-columns:1fr}
+}
+#tab-exp .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0}
+#tab-exp .card .sub{font-family:var(--mono);font-size:12px;color:var(--accent);margin-top:2px}
+#tab-exp .pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#tab-exp .pair figure{margin:0;display:flex;flex-direction:column;gap:4px;min-width:0}
+#tab-exp .pair canvas{width:100%;height:auto;display:block;border-radius:6px;background:var(--vf);aspect-ratio:3/2}
+#tab-exp .pair canvas.crop{image-rendering:pixelated}
+#tab-exp .pair figcaption{font-family:var(--mono);font-size:11.5px}
+#tab-exp .card dl{margin:0;display:flex;flex-direction:column;gap:6px;font-size:13.5px}
+#tab-exp .card dt{font-weight:600}
+#tab-exp .card dd{margin:0;color:var(--muted)}
+#tab-exp .pay{font-size:13px;border-top:1px solid var(--line);padding-top:10px;margin:0}
+#tab-exp .goals{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media (max-width:900px){#tab-exp .goals{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:520px){#tab-exp .goals{grid-template-columns:1fr}
+}
+#tab-exp .goal{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+#tab-exp .goal p{margin:0;font-size:13.5px}
+#tab-exp .goal .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block}
+#tab-exp .goal button{margin-top:auto;font:inherit;font-weight:600;font-size:13px;padding:8px 10px;border-radius:8px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);cursor:pointer}
+#tab-exp .collage{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media (max-width:600px){#tab-exp .collage{grid-template-columns:repeat(3,1fr)}
+}
+#tab-exp .frame{background:var(--vf);border-radius:8px;padding:6px;color:var(--vf-ink);cursor:pointer;border:2px solid transparent;font:inherit;text-align:left}
+#tab-exp .frame.cur{border-color:var(--accent)}
+#tab-exp .frame canvas{width:100%;height:auto;display:block;border-radius:4px;aspect-ratio:3/2}
+#tab-exp .frame span{display:block;font-family:var(--mono);font-size:11px;padding-top:4px}
+
+@media (prefers-color-scheme:dark){}
+#tab-lens .wrap{max-width:1040px;margin:0 auto;padding-block:20px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;gap:28px}
+#tab-lens h1{font-family:var(--display);font-weight:800;font-size:clamp(28px,6vw,44px);line-height:1.05;margin:0;text-wrap:balance}
+#tab-lens h1 em{font-style:normal;color:var(--accent)}
+#tab-lens h2{font-family:var(--display);font-weight:800;font-size:22px;margin:0;text-wrap:balance}
+#tab-lens h3{font-family:var(--display);font-weight:800;font-size:17px;margin:0}
+#tab-lens .lead{color:var(--muted);max-width:62ch;margin:6px 0 0}
+#tab-lens .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+#tab-lens .note{font-size:13px;color:var(--muted);margin:0;max-width:65ch}
+#tab-lens .steps{display:flex;flex-wrap:wrap;gap:8px 22px;margin:14px 0 0;padding:0;list-style:none;counter-reset:s;font-weight:600}
+#tab-lens .steps li{counter-increment:s;display:flex;gap:8px;align-items:center}
+#tab-lens .steps li::before{content:counter(s);font-family:var(--mono);font-size:12px;width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center}
+#tab-lens button:focus-visible,#tab-lens input:focus-visible,#tab-lens [tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#tab-lens .gallery{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+@media (max-width:900px){#tab-lens .gallery{grid-template-columns:repeat(3,1fr)}
+}
+#tab-lens .pick{background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:6px;font:inherit;color:var(--ink);cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:6px;min-width:0}
+#tab-lens .pick[aria-pressed="true"]{border-color:var(--accent)}
+#tab-lens .pick canvas{width:100%;height:auto;display:block;border-radius:7px;background:var(--vf);aspect-ratio:3/4}
+#tab-lens .pick b{font-family:var(--display);font-size:15px;padding:0 2px}
+#tab-lens .pick span{font-size:12px;color:var(--muted);padding:0 2px 4px;line-height:1.35}
+#tab-lens .lab{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:18px;align-items:start}
+@media (max-width:820px){#tab-lens .lab{grid-template-columns:1fr}
+}
+@media (min-width:821px){#tab-lens .vf{position:sticky;top:12px}
+}
+#tab-lens .vf{background:var(--vf);border-radius:14px;padding:12px;color:var(--vf-ink);min-width:0;display:flex;flex-direction:column;gap:12px}
+#tab-lens .vf canvas{display:block;width:100%;max-width:460px;margin:0 auto;height:auto;aspect-ratio:3/4;border-radius:8px}
+#tab-lens .nogl{padding:40px 16px;text-align:center;color:var(--vf-mute)}
+#tab-lens .hud{display:flex;flex-direction:column;gap:6px;padding:2px 4px 4px}
+#tab-lens .hud .pat{font-family:var(--display);font-weight:800;font-size:20px}
+#tab-lens .hud .ratio{font-family:var(--mono);font-size:13px}
+#tab-lens .hud .tip{font-size:13px;color:var(--vf-mute);max-width:60ch}
+#tab-lens .col{display:flex;flex-direction:column;gap:14px;min-width:0}
+#tab-lens .panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0}
+#tab-lens .plan{width:100%;max-width:340px;margin:0 auto;display:block;touch-action:none;user-select:none}
+#tab-lens .plan text{font-family:var(--mono);fill:var(--muted);font-size:10px}
+#tab-lens .plan .ring{fill:none;stroke:var(--line);stroke-dasharray:3 4}
+#tab-lens .plan g[data-l]{cursor:grab}
+#tab-lens .plan g[data-l]:active{cursor:grabbing}
+#tab-lens .plan .dotl{font-size:12px;font-weight:600;fill:#fff;text-anchor:middle}
+#tab-lens .lcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+#tab-lens .lhead{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start}
+#tab-lens .lhead .dot{width:14px;height:14px;border-radius:50%;margin-top:4px}
+#tab-lens .lhead p{margin:0}
+#tab-lens .sw{display:flex;gap:6px;align-items:center;font-size:13px;cursor:pointer}
+#tab-lens .sw input{accent-color:var(--accent);width:18px;height:18px}
+#tab-lens .dial{display:flex;flex-direction:column;gap:2px}
+#tab-lens .dial .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+#tab-lens .dial label,#tab-lens .dial .lb{font-weight:600;font-size:14px}
+#tab-lens .dial .val{font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums}
+#tab-lens input[type=range]{width:100%;accent-color:var(--accent)}
+#tab-lens .chips{display:flex;flex-wrap:wrap;gap:6px}
+#tab-lens .chips button{font:inherit;font-size:13px;padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+#tab-lens .chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+#tab-lens .lcard.off .dial,#tab-lens .lcard.off .chips{opacity:.45}
+
+#tab-lens .vf canvas{aspect-ratio:2/3;max-width:400px}
+#tab-lens .pick canvas{aspect-ratio:2/3}
+#tab-lens .ticks{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted);padding:0 2px}
+#tab-lens .hud .tip+.tip{margin-top:2px}
+#tab-lens input[type=range]:disabled{opacity:.4}
+
+
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+:root{--tabh:58px}
+.tabbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:11;background:var(--bg);border-bottom:1px solid var(--line)}
+.tabs{max-width:1040px;margin:0 auto;display:flex;gap:4px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.tabs button{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:1px;font:inherit;background:transparent;border:0;border-bottom:3px solid transparent;padding:9px 6px 7px;cursor:pointer;text-align:left;min-height:var(--tabh);box-sizing:border-box}
+.tabs .lv{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.tabs .nm{font-family:var(--display);font-weight:800;font-size:clamp(13px,3.3vw,18px);line-height:1.2;color:var(--muted)}
+.tabs button[aria-selected="true"] .nm{color:var(--ink)}
+.tabs button[aria-selected="true"][data-tab="dasar"]{border-bottom-color:var(--ok)}
+.tabs button[aria-selected="true"][data-tab="dasar"] .lv{color:var(--ok)}
+.tabs button[aria-selected="true"][data-tab="lensa"]{border-bottom-color:var(--warn)}
+.tabs button[aria-selected="true"][data-tab="lensa"] .lv{color:var(--warn)}
+.tabs button[aria-selected="true"][data-tab="lanjut"]{border-bottom-color:var(--accent)}
+.tabs button[aria-selected="true"][data-tab="lanjut"] .lv{color:var(--accent)}
+.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+section[hidden]{display:none}
+#tab-exp .vf,#tab-lens .vf,#tab-light .vf{top:calc(var(--tabh) + 12px + env(safe-area-inset-top,0px))}
+.jumpbox{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;border-top:1px solid var(--line);padding-top:18px}
+.jumpbox p{margin:0;color:var(--muted);font-size:14px;flex:1 1 240px}
+.jump{font:inherit;font-weight:600;font-size:14px;padding:9px 14px;border-radius:8px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);cursor:pointer}
+.jump:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:760px){
+ .tabbar{position:fixed;top:auto;bottom:0;left:0;right:0;border-bottom:0;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -6px 20px rgba(0,0,0,.08)}
+ .tabs{gap:0}
+ .tabs button{border-bottom:0;border-top:3px solid transparent;align-items:center;text-align:center;padding:7px 4px 6px}
+ .tabs button[aria-selected="true"][data-tab="dasar"]{border-top-color:var(--ok)}
+ .tabs button[aria-selected="true"][data-tab="lensa"]{border-top-color:var(--warn)}
+ .tabs button[aria-selected="true"][data-tab="lanjut"]{border-top-color:var(--accent)}
+ body{padding-bottom:calc(var(--tabh) + 16px + env(safe-area-inset-bottom,0px))}
+}
+
+</style>
+<style>
+.installbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--ink);color:var(--bg);font-size:13.5px;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.installbar span{flex:1 1 220px}
+.installbar button{font:inherit;font-weight:600;border-radius:8px;border:1px solid var(--bg);background:var(--bg);color:var(--ink);padding:6px 12px;cursor:pointer}
+.installbar #installClose{background:transparent;color:var(--bg);border-color:transparent;font-size:18px;padding:2px 8px}
+</style>
+</head>
+<body>
+
+<div id="installBar" class="installbar" hidden>
+  <span id="installText">Pasang Lab Fotografi di layar utama supaya bisa dibuka seperti aplikasi, juga tanpa internet.</span>
+  <button type="button" id="installBtn">Pasang</button>
+  <button type="button" id="installClose" aria-label="Tutup">×</button>
+</div>
+<nav class="tabbar"><div class="tabs" role="tablist" aria-label="Materi">
+<button type="button" role="tab" id="t_dasar" aria-controls="tab-exp" aria-selected="true" data-tab="dasar"><span class="lv">Dasar</span><span class="nm">Segitiga Exposure</span></button>
+<button type="button" role="tab" id="t_lensa" aria-controls="tab-lens" aria-selected="false" data-tab="lensa"><span class="lv">Menengah</span><span class="nm">Lensa dan Jarak</span></button>
+<button type="button" role="tab" id="t_lanjut" aria-controls="tab-light" aria-selected="false" data-tab="lanjut"><span class="lv">Lanjut</span><span class="nm">Cahaya Studio 3D</span></button>
+</div></nav>
+<section id="tab-exp" role="tabpanel" aria-labelledby="t_dasar">
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Kelas Fotografi Dasar</div>
+    <h1>Kamera ini cuma bisa <em>menerangkan</em> dan <em>menggelapkan</em></h1>
+    <p class="lead">Geser tiga pengaturan segitiga exposure dan lihat fotonya jadi lebih terang atau lebih gelap. Tiap pengaturan juga membawa satu efek samping: blur latar, gerakan kabur, atau bintik noise.</p>
+  </header>
+
+  <section class="top">
+    <div class="vf">
+      <canvas id="view" width="600" height="400" aria-label="Pratinjau foto"></canvas>
+      <div class="hud">
+        <span><b id="hA">f/16</b> · <b id="hS">1/125</b> · ISO <b id="hI">100</b></span>
+        <span class="meter" id="meter" aria-label="Pengukur cahaya"></span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div>
+        <div class="eyebrow" style="margin-bottom:6px">Mode kamera</div>
+        <div class="chips" id="modes"></div>
+        <div class="dial" id="compBox" style="margin-top:12px" hidden>
+          <div class="row"><label for="comp">Kompensasi exposure</label><span class="val" id="vC"></span></div>
+          <input type="range" id="comp" min="-3" max="3" step="1" value="0">
+          <div class="hint">Minta kamera sengaja lebih terang (+) atau lebih gelap (−)</div>
+        </div>
+      </div>
+      <hr class="sep">
+      <div>
+        <div class="eyebrow" style="margin-bottom:6px">Kondisi cahaya</div>
+        <div class="chips" id="scene"></div>
+      </div>
+      <div class="dial" id="dAp">
+        <div class="row"><label for="ap">Aperture (bukaan)</label><span class="val" id="vA"></span></div>
+        <input type="range" id="ap" min="0" max="8" step="1">
+        <div class="hint">Angka kecil = lubang lebar = lebih terang</div>
+        <div class="fx"><span class="bars" id="bA"></span><span id="xA"></span></div>
+      </div>
+      <div class="dial" id="dSh">
+        <div class="row"><label for="sh">Shutter speed</label><span class="val" id="vS"></span></div>
+        <input type="range" id="sh" min="0" max="12" step="1">
+        <div class="hint">Makin lama terbuka = lebih terang</div>
+        <div class="fx"><span class="bars" id="bS"></span><span id="xS"></span></div>
+      </div>
+      <div class="dial" id="dIso">
+        <div class="row"><label for="iso">ISO</label><span class="val" id="vI"></span></div>
+        <input type="range" id="iso" min="0" max="7" step="1">
+        <div class="hint">Angka besar = sensor lebih peka = lebih terang</div>
+        <div class="fx"><span class="bars" id="bI"></span><span id="xI"></span></div>
+      </div>
+      <div class="verdict" id="verdict"></div>
+    </div>
+  </section>
+
+  <section class="mid">
+    <div class="tri">
+      <svg viewBox="0 0 300 282" role="img" aria-label="Segitiga exposure">
+        <polygon points="150,34 270,230 30,230" fill="none" stroke="var(--line)" stroke-width="3"/>
+        <circle cx="150" cy="34" r="7" fill="var(--accent)"/>
+        <circle cx="270" cy="230" r="7" fill="var(--accent)"/>
+        <circle cx="30" cy="230" r="7" fill="var(--accent)"/>
+        <text x="150" y="16" text-anchor="middle" font-size="12" font-weight="600">APERTURE · blur latar</text>
+        <text x="150" y="58" text-anchor="middle" font-size="13" id="tA"></text>
+        <text x="270" y="254" text-anchor="end" font-size="12" font-weight="600">ISO</text>
+        <text x="270" y="270" text-anchor="end" font-size="11" style="fill:var(--muted)">noise</text>
+        <text x="262" y="210" text-anchor="end" font-size="13" id="tI"></text>
+        <text x="30" y="254" text-anchor="start" font-size="12" font-weight="600">SHUTTER</text>
+        <text x="30" y="270" text-anchor="start" font-size="11" style="fill:var(--muted)">gerakan</text>
+        <text x="38" y="210" text-anchor="start" font-size="13" id="tS"></text>
+        <text x="150" y="150" text-anchor="middle" font-size="12" style="fill:var(--muted)">total</text>
+        <text x="150" y="178" text-anchor="middle" font-size="24" font-weight="600" id="tT"></text>
+      </svg>
+    </div>
+    <div class="notes">
+      <h2>Cara membaca segitiga</h2>
+      <p>Angka di tiap sudut menunjukkan berapa stop pengaturan itu menambah (+) atau mengurangi (−) cahaya dibanding titik awal f/16 · 1/125 · ISO 100. Titik awal itu dikenal sebagai aturan Sunny 16, yaitu exposure yang pas di siang cerah. Total 0 berarti foto pas.</p>
+      <dl class="rule">
+        <dt>+1 stop</dt><dd>cahaya 2× lebih banyak, foto lebih terang</dd>
+        <dt>−1 stop</dt><dd>cahaya setengahnya, foto lebih gelap</dd>
+        <dt>Imbang</dt><dd>naikkan satu pengaturan, turunkan yang lain dengan jumlah stop sama, terang foto tetap. Yang berubah hanya efek sampingnya.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:12px">
+    <h2>Efek samping tiap sudut</h2>
+    <p class="note">Dua foto di tiap kartu dibuat sama terang, jadi yang berbeda hanya efeknya.</p>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:12px">
+    <h2>Pilih tujuan, bukan angka</h2>
+    <p class="note">Tiga pengaturan terlalu banyak dipikirkan sekaligus. Atur satu yang paling menentukan hasil foto, lalu biarkan kamera menghitung sisanya. Tiap kartu menyetel lab di atas ke mode yang sesuai.</p>
+    <div class="goals" id="goals"></div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:10px">
+    <h2>Kolase bracketing</h2>
+    <p class="note">Pengaturan kamu sekarang ada di tengah, diapit −2 sampai +2 stop. Ketuk satu bingkai untuk memakai terang itu. Di mode manual yang berubah ISO, di mode otomatis yang berubah kompensasi exposure.</p>
+    <div class="collage" id="collage"></div>
+  </section>
+<div class="jumpbox"><p>Sudah paham segitiga exposure? Lanjut ke lensa dan jarak kamera.</p><button type="button" class="jump" data-go="lensa">Lanjut ke Lensa dan Jarak</button></div></div>
+</section>
+<section id="tab-lens" role="tabpanel" aria-labelledby="t_lensa" hidden>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Kelas Fotografi Menengah</div>
+    <h1>Lensa dan <em>jarak</em> mengubah bentuk foto</h1>
+    <p class="lead">Panjang fokus mengatur seberapa luas yang tertangkap. Jarak kamera ke subjek mengatur perspektif, yaitu bentuk wajah dan seberapa rapat latar terlihat. Geser lensanya dan bandingkan.</p>
+  </header>
+
+  <section style="display:flex;flex-direction:column;gap:12px">
+    <h2>Satu subjek, enam panjang fokus</h2>
+    <p class="note">Subjek dibuat sama besar di semua gambar, jadi kameranya maju atau mundur. Contoh ini memakai kamera full frame. Ketuk gambar untuk mencobanya di bawah.</p>
+    <div class="gallery" id="lnGallery"></div>
+  </section>
+
+  <section class="lab">
+    <div class="vf">
+      <canvas id="lnView" width="360" height="540" aria-label="Potret dengan lensa yang dipilih"></canvas>
+      <div class="hud">
+        <div class="pat" id="lnTitle"></div>
+        <div class="ratio" id="lnStats"></div>
+        <div class="tip" id="lnFace"></div>
+        <div class="tip" id="lnBg"></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="panel">
+        <div class="dial">
+          <div class="lb">Lensa yang dipasang</div>
+          <div class="chips" id="lnLens" style="margin-top:6px"></div>
+          <p class="note" id="lnLensNote"></p>
+        </div>
+        <div class="dial">
+          <div class="row"><label for="lnFocal">Panjang fokus lensa</label><span class="val" id="lnVal"></span></div>
+          <input type="range" id="lnFocal" min="0" max="1000" step="1">
+          <div class="ticks"><span id="lnMin"></span><span id="lnMax"></span></div>
+        </div>
+        <div class="dial">
+          <div class="lb">Sensor kamera</div>
+          <div class="chips" id="lnSensor" style="margin-top:6px"></div>
+          <p class="note" id="lnSensorNote"></p>
+        </div>
+        <div class="dial">
+          <div class="lb">Cara mengambil foto</div>
+          <div class="chips" id="lnMode" style="margin-top:6px"></div>
+          <p class="note" id="lnModeNote"></p>
+        </div>
+      </div>
+      <div class="panel">
+        <div>
+          <h3>Denah dari atas</h3>
+          <p class="note">Segitiga oranye adalah area yang tertangkap kamera. Kotak abu-abu adalah gedung di latar, dengan lampu jalan di antaranya.</p>
+        </div>
+        <svg class="plan" id="lnPlan" viewBox="0 0 300 320" role="img" aria-label="Denah posisi kamera dan subjek"></svg>
+      </div>
+    </div>
+  </section>
+<div class="jumpbox"><p>Sudah paham lensa? Lanjut mengatur cahaya studio dengan tiga lampu.</p><button type="button" class="jump" data-go="lanjut">Lanjut ke Cahaya Studio 3D</button></div></div>
+</section>
+<section id="tab-light" role="tabpanel" aria-labelledby="t_lanjut" hidden>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Kelas Fotografi Tingkat Lanjut</div>
+    <h1>Mengatur <em>cahaya</em> di studio 3D</h1>
+    <p class="lead">Satu subjek, tiga lampu. Kamu hanya menentukan dari mana cahaya datang, setinggi apa, dan sekuat apa. Bayangan dan bentuk wajah berubah langsung di foto.</p>
+    <ol class="steps">
+      <li>Pilih pola cahaya</li>
+      <li>Geser titik lampu di denah</li>
+      <li>Atur terang dan tinggi</li>
+    </ol>
+  </header>
+
+  <section style="display:flex;flex-direction:column;gap:12px">
+    <h2>Mulai dari pola klasik</h2>
+    <div class="gallery" id="gallery"></div>
+  </section>
+
+  <section class="lab">
+    <div class="vf" id="vf">
+      <canvas id="view3d" width="420" height="560" aria-label="Foto potret 3D dengan lampu studio"></canvas>
+      <div class="hud">
+        <div class="pat" id="pat"></div>
+        <div class="ratio" id="ratio"></div>
+        <div class="tip" id="tip"></div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="panel">
+        <div>
+          <h3>Denah studio dari atas</h3>
+          <p class="note">Geser titik berwarna mengelilingi subjek. Panah keyboard juga bisa dipakai setelah titik dipilih.</p>
+        </div>
+        <svg class="plan" id="plan" viewBox="0 0 300 330" role="group" aria-label="Denah studio"></svg>
+      </div>
+      <div id="lcards" style="display:flex;flex-direction:column;gap:14px"></div>
+      <div class="panel">
+        <div class="dial">
+          <div class="lb">Latar</div>
+          <div class="chips" id="bgchips" style="margin-top:6px"></div>
+        </div>
+        <div class="dial">
+          <div class="row"><label for="exp">Exposure kamera</label><span class="val" id="vexp"></span></div>
+          <input type="range" id="exp" min="-2" max="2" step="0.5" value="0">
+          <p class="note">Sama seperti segitiga exposure: kalau cahaya sudah bagus tapi foto terlalu terang atau gelap, atur di sini.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+<div class="jumpbox"><p>Butuh dasar dulu? Segitiga exposure menjelaskan terang, gelap, blur, dan noise.</p><button type="button" class="jump" data-go="dasar">Kembali ke Segitiga Exposure</button></div></div>
+</section>
+<script>
+(function(){
+
+const AP=["1.4","2","2.8","4","5.6","8","11","16","22"];
+const SH=["1/4000","1/2000","1/1000","1/500","1/250","1/125","1/60","1/30","1/15","1/8","1/4","1/2","1\""];
+const ISO=[100,200,400,800,1600,3200,6400,12800];
+const SCENES=[["Cerah",0],["Mendung",2],["Teduh",4],["Dalam ruangan",6],["Malam",10]];
+const BASE={ap:7,sh:5,iso:0};
+const APR=[14,10,7,5,3,1,0,0,0];            // radius blur latar per bukaan
+const LEN=[0,1,2,3,6,12,25,50,100,187,220,220,220]; // panjang kabur gerak (px) per shutter
+const NOISE=[0,0.004,0.009,0.016,0.028,0.045,0.07,0.1];
+const APFX=[[4,"Latar sangat blur, area tajam tipis"],[4,"Latar sangat blur"],[3,"Latar blur"],[2,"Latar agak blur"],[1,"Latar sedikit blur"],[1,"Hampir semua tajam"],[0,"Semua tajam"],[0,"Semua tajam, cocok lanskap"],[0,"Semua tajam"]];
+const SHFX=[[0,"Gerakan beku total"],[0,"Gerakan beku total"],[0,"Gerakan beku total"],[0,"Gerakan beku total"],[0,"Gerakan beku"],[0,"Gerakan beku"],[1,"Sedikit kabur"],[2,"Kabur, tangan mulai goyang"],[3,"Kabur, pakai tripod"],[4,"Kabur panjang, wajib tripod"],[4,"Kabur panjang, wajib tripod"],[4,"Kabur panjang, wajib tripod"],[4,"Kabur panjang, wajib tripod"]];
+const ISOFX=[[0,"Bersih"],[0,"Bersih"],[1,"Hampir bersih"],[1,"Noise halus"],[2,"Noise terlihat"],[3,"Noise jelas"],[4,"Noise kasar"],[4,"Noise sangat kasar"]];
+const st={ap:7,sh:5,iso:0,scene:0,mode:"m",comp:0};
+const $=id=>document.getElementById(id);
+const W=600,H=400;
+
+/* ---------- gambar lapisan pemandangan ---------- */
+function mk(){const c=document.createElement("canvas");c.width=W;c.height=H;return c}
+const cFar=mk(),cMid=mk(),cCar=mk(),cFore=mk();
+let g=cFar.getContext("2d");
+let sky=g.createLinearGradient(0,0,0,260);sky.addColorStop(0,"#5d9fd8");sky.addColorStop(1,"#bfe0f0");
+g.fillStyle=sky;g.fillRect(0,0,W,H);
+g.fillStyle="#fff6cc";g.beginPath();g.arc(470,80,34,0,7);g.fill();
+g.fillStyle="#fff";[[120,90,28],[150,82,34],[185,92,26],[330,60,20],[352,54,24]].forEach(c=>{g.beginPath();g.arc(c[0],c[1],c[2],0,7);g.fill()});
+g.fillStyle="#5f8f6b";g.beginPath();g.moveTo(0,250);g.quadraticCurveTo(160,170,330,240);g.quadraticCurveTo(470,190,600,235);g.lineTo(600,400);g.lineTo(0,400);g.fill();
+g.fillStyle="#3f7a45";g.fillRect(0,280,W,120);
+g.fillStyle="#7a3b22";g.fillRect(330,215,150,75);
+g.fillStyle="#2b1a12";g.beginPath();g.moveTo(315,220);g.quadraticCurveTo(340,200,320,165);g.quadraticCurveTo(360,195,405,190);g.quadraticCurveTo(450,195,490,165);g.quadraticCurveTo(470,200,495,220);g.fill();
+g.fillStyle="#f2d35b";g.fillRect(350,235,22,22);g.fillRect(395,235,22,22);g.fillRect(440,235,22,22);
+g.fillStyle="#4a2a17";g.fillRect(400,262,18,28);
+g.fillStyle="#5a3b25";g.fillRect(150,230,14,70);
+g.fillStyle="#2f6a37";g.beginPath();g.arc(157,215,42,0,7);g.fill();
+g.fillStyle="#3c8044";g.beginPath();g.arc(140,205,26,0,7);g.fill();
+g.fillStyle="#fff7b0";for(let i=0;i<9;i++){g.beginPath();g.arc(326+i*21,196-Math.sin(i/8*Math.PI)*12+ (i%2)*3,3.2,0,7);g.fill()}
+
+g=cMid.getContext("2d");
+g.fillStyle="#b9b4a6";g.fillRect(0,306,W,6);
+g.fillStyle="#4b4e54";g.fillRect(0,312,W,60);
+g.fillStyle="#e8e1c4";for(let x=10;x<W;x+=70)g.fillRect(x,340,34,4);
+g.fillStyle="#d8d8d0";g.fillRect(0,368,W,3);
+g.fillStyle="#7b7f86";g.fillRect(76,242,6,70);
+g.fillStyle="#d33";g.beginPath();g.arc(79,236,17,0,7);g.fill();
+g.fillStyle="#fff";g.fillRect(69,233,20,6);
+
+g=cCar.getContext("2d");
+g.fillStyle="rgba(0,0,0,.35)";g.beginPath();g.ellipse(310,372,98,8,0,0,7);g.fill();
+g.fillStyle="#c8281e";g.beginPath();g.roundRect(220,326,180,38,10);g.fill();
+g.beginPath();g.moveTo(252,327);g.lineTo(272,298);g.lineTo(350,298);g.lineTo(372,327);g.closePath();g.fill();
+g.fillStyle="#a9dff2";g.beginPath();g.moveTo(262,326);g.lineTo(277,304);g.lineTo(308,304);g.lineTo(308,326);g.closePath();g.fill();
+g.beginPath();g.moveTo(316,326);g.lineTo(316,304);g.lineTo(346,304);g.lineTo(362,326);g.closePath();g.fill();
+g.fillStyle="#f6e27a";g.fillRect(388,334,10,8);
+g.fillStyle="#ffd9d0";g.fillRect(220,336,6,6);
+g.fillStyle="#f3f3ee";g.fillRect(300,347,28,9);
+g.fillStyle="#1d1f22";[[258,364],[362,364]].forEach(c=>{g.beginPath();g.arc(c[0],c[1],15,0,7);g.fill()});
+g.fillStyle="#c9ced4";[[258,364],[362,364]].forEach(c=>{g.beginPath();g.arc(c[0],c[1],7,0,7);g.fill()});
+
+g=cFore.getContext("2d");
+let gr=g.createLinearGradient(0,372,0,400);gr.addColorStop(0,"rgba(30,74,36,0)");gr.addColorStop(1,"rgba(30,74,36,1)");
+g.fillStyle=gr;g.fillRect(0,372,W,28);
+const FC=["#e84a4a","#f4d03f","#ffffff","#ff8c42"];
+for(let i=0;i<15;i++){g.fillStyle=FC[i%4];g.beginPath();g.arc(i*42+12,386+(i%3)*5,6+(i%4)*3,0,7);g.fill()}
+g.fillStyle="#2a5e30";[[560,8,38],[592,42,30],[528,36,26],[572,-6,40]].forEach(c=>{g.beginPath();g.arc(c[0],c[1],c[2],0,7);g.fill()});
+g.fillStyle="#3d7d43";[[548,22,18],[580,56,14],[516,50,14]].forEach(c=>{g.beginPath();g.arc(c[0],c[1],c[2],0,7);g.fill()});
+
+/* ---------- piksel linear premultiplied ---------- */
+const LIN=new Float32Array(256);for(let i=0;i<256;i++)LIN[i]=Math.pow(i/255,2.2);
+function toLin(c){
+  const d=c.getContext("2d").getImageData(0,0,W,H).data,o=new Float32Array(W*H*4);
+  for(let i=0;i<d.length;i+=4){const a=d[i+3]/255;o[i]=LIN[d[i]]*a;o[i+1]=LIN[d[i+1]]*a;o[i+2]=LIN[d[i+2]]*a;o[i+3]=a}
+  return o;
+}
+const LAY={far:toLin(cFar),mid:toLin(cMid),car:toLin(cCar),fore:toLin(cFore)};
+
+function box1d(src,dst,r,lines,len,along,line){
+  const n=2*r+1;
+  for(let l=0;l<lines;l++)for(let ch=0;ch<4;ch++){
+    const off=l*line+ch;let s=0;
+    for(let k=-r;k<=r;k++){const j=k<0?0:(k>=len?len-1:k);s+=src[off+j*along]}
+    for(let i=0;i<len;i++){
+      dst[off+i*along]=s/n;
+      const a=i+r+1,b=i-r;
+      s+=src[off+(a>=len?len-1:a)*along]-src[off+(b<0?0:b)*along];
+    }
+  }
+}
+const cache=new Map();
+function remember(key,make){
+  if(cache.has(key)){const v=cache.get(key);cache.delete(key);cache.set(key,v);return v}
+  const v=make();cache.set(key,v);
+  if(cache.size>8)cache.delete(cache.keys().next().value);
+  return v;
+}
+function blurred(name,r){
+  if(r===0)return LAY[name];
+  return remember(name+":"+r,()=>{
+    const a=new Float32Array(W*H*4),b=new Float32Array(W*H*4);
+    box1d(LAY[name],a,r,H,W,4,W*4);box1d(a,b,r,W,H,W*4,4);
+    box1d(b,a,r,H,W,4,W*4);box1d(a,b,r,W,H,W*4,4);
+    return b;
+  });
+}
+function motion(L){
+  return remember("car:"+L,()=>{const o=new Float32Array(W*H*4);box1d(LAY.car,o,Math.max(1,Math.round(L/2)),H,W,4,W*4);return o});
+}
+
+/* ---------- noise tetap (bukan acak tiap frame) ---------- */
+let seed=12345;
+function rnd(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}
+const gauss=()=>(rnd()+rnd()+rnd()-1.5)*2;
+const NL=new Float32Array(W*H),NC=new Float32Array(W*H*3);
+for(let i=0;i<NL.length;i++)NL[i]=gauss();
+for(let i=0;i<NC.length;i++)NC[i]=gauss();
+const ENC=new Float32Array(4096);for(let i=0;i<4096;i++)ENC[i]=Math.pow(i/4095,2/2.2);
+const enc=x=>{if(x<=0)return 0;const i=(Math.sqrt(x)*4095)|0;return ENC[i>4095?4095:i]};
+
+/* ---------- komposisi foto ---------- */
+function compose(p,ctx,sx,sy,sw,sh){
+  const ow=ctx.canvas.width,oh=ctx.canvas.height,step=sw/ow;
+  const img=ctx.createImageData(ow,oh),o=img.data;
+  const far=blurred("far",p.r),fore=blurred("fore",p.r),mid=LAY.mid,car=p.L>0?motion(p.L):LAY.car;
+  const m=Math.pow(2,p.stops),sig=NOISE[p.iso];
+  let q=0;
+  for(let y=0;y<oh;y++){
+    const yy=sy+y*step;
+    for(let x=0;x<ow;x++){
+      const pi=yy*W+sx+x*step,i=pi*4;
+      let r=far[i],g=far[i+1],b=far[i+2],a=mid[i+3],k=1-a;
+      r=mid[i]+r*k;g=mid[i+1]+g*k;b=mid[i+2]+b*k;
+      a=car[i+3];k=1-a;r=car[i]+r*k;g=car[i+1]+g*k;b=car[i+2]+b*k;
+      a=fore[i+3];k=1-a;r=fore[i]+r*k;g=fore[i+1]+g*k;b=fore[i+2]+b*k;
+      let R=enc(r*m),G=enc(g*m),B=enc(b*m);
+      if(sig>0){
+        const amp=sig*(1.3-(R+G+B)/3),n=NL[pi]*amp,c=amp*0.5;
+        R+=n+NC[pi*3]*c;G+=n+NC[pi*3+1]*c;B+=n+NC[pi*3+2]*c;
+      }
+      o[q++]=R*255;o[q++]=G*255;o[q++]=B*255;o[q++]=255;
+    }
+  }
+  ctx.putImageData(img,0,0);
+}
+const FULL=[0,0,W,H];
+
+/* ---------- logika exposure ---------- */
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const sc=()=>SCENES[st.scene][1];
+const totalOf=()=>(st.sh-BASE.sh)-(st.ap-BASE.ap)+(st.iso-BASE.iso)-sc();
+const fmt=n=>n===0?"0":(n>0?"+":"−")+Math.abs(n);
+function verdictFor(s){
+  if(s<=-4)return["Hampir hitam","Kurang cahaya parah. Buka bukaan, perlambat shutter, atau naikkan ISO."];
+  if(s<=-2)return["Terlalu gelap","Kurang "+(-s)+" stop."];
+  if(s===-1)return["Agak gelap","Kurang 1 stop."];
+  if(s===0)return["Pas","Exposure seimbang untuk cahaya ini."];
+  if(s===1)return["Agak terang","Lebih 1 stop."];
+  if(s<4)return["Terlalu terang","Kelebihan "+s+" stop, langit mulai putih."];
+  return["Hampir putih","Sempitkan bukaan, percepat shutter, atau turunkan ISO."];
+}
+const MODES=[["m","M · Manual",null],["autoiso","Auto ISO","iso"],["av","A · Prioritas bukaan","sh"],["tv","S · Prioritas shutter","ap"]];
+function autoSolve(){
+  const T=st.comp,s=sc();
+  if(st.mode==="av")st.sh=clamp(T+st.ap-2-st.iso+s,0,12);
+  if(st.mode==="tv")st.ap=clamp(st.sh+2+st.iso-s-T,0,8);
+  if(st.mode==="autoiso")st.iso=clamp(T-st.sh+st.ap-2+s,0,7);
+}
+
+/* ---------- UI ---------- */
+const view=$("view").getContext("2d");
+const sceneBox=$("scene");
+SCENES.forEach((s,i)=>{const b=document.createElement("button");b.type="button";b.id="sc"+i;b.textContent=s[0];b.onclick=()=>{st.scene=i;update()};sceneBox.appendChild(b)});
+const modeBox=$("modes");
+MODES.forEach(m=>{const b=document.createElement("button");b.type="button";b.id="md_"+m[0];b.textContent=m[1];b.onclick=()=>{st.mode=m[0];update()};modeBox.appendChild(b)});
+const meter=$("meter");for(let i=-3;i<=3;i++){const s=document.createElement("span");if(i===0)s.className="mid";meter.appendChild(s)}
+["bA","bS","bI"].forEach(id=>{for(let i=0;i<4;i++)$(id).appendChild(document.createElement("i"))});
+function setFx(b,x,fx){[...$(b).children].forEach((el,i)=>el.classList.toggle("on",i<fx[0]));$(x).textContent=fx[1]}
+
+const coll=$("collage"),frames=[];
+for(let k=-2;k<=2;k++){
+  const f=document.createElement("button");f.type="button";f.className="frame"+(k===0?" cur":"");
+  const c=document.createElement("canvas");c.width=150;c.height=100;const l=document.createElement("span");
+  f.append(c,l);
+  f.onclick=()=>{if(st.mode==="m")st.iso=clamp(st.iso+k,0,7);else st.comp=clamp(st.comp+k,-3,3);update()};
+  coll.appendChild(f);frames.push({k,ctx:c.getContext("2d"),l});
+}
+["ap","sh","iso"].forEach(k=>$(k).addEventListener("input",e=>{st[k]=+e.target.value;update()}));
+$("comp").addEventListener("input",e=>{st.comp=+e.target.value;update()});
+
+function update(){
+  autoSolve();
+  const auto=(MODES.find(m=>m[0]===st.mode)||[])[2];
+  MODES.forEach(m=>$("md_"+m[0]).setAttribute("aria-pressed",m[0]===st.mode));
+  SCENES.forEach((_,j)=>$("sc"+j).setAttribute("aria-pressed",j===st.scene));
+  $("compBox").hidden=st.mode==="m";
+  $("comp").value=st.comp;$("vC").textContent=fmt(st.comp)+" EV";
+  [["ap","dAp"],["sh","dSh"],["iso","dIso"]].forEach(([k,d])=>{
+    $(k).value=st[k];$(k).disabled=(auto===k);$(d).classList.toggle("auto",auto===k);
+  });
+  const a="f/"+AP[st.ap],s=SH[st.sh],i=ISO[st.iso];
+  $("vA").textContent=a;$("vS").textContent=s;$("vI").textContent=i;
+  $("hA").textContent=a;$("hS").textContent=s;$("hI").textContent=i;
+  setFx("bA","xA",APFX[st.ap]);setFx("bS","xS",SHFX[st.sh]);setFx("bI","xI",ISOFX[st.iso]);
+  const t=totalOf();
+  const P={r:APR[st.ap],L:LEN[st.sh],iso:st.iso,stops:t};
+  compose(P,view,...FULL);
+  $("tA").textContent=fmt(-(st.ap-BASE.ap))+" stop";
+  $("tS").textContent=fmt(st.sh-BASE.sh)+" stop";
+  $("tI").textContent=fmt(st.iso-BASE.iso)+" stop";
+  $("tT").textContent=fmt(t)+" EV";
+  const col=t===0?"var(--ok)":Math.abs(t)<=1?"var(--warn)":"var(--accent)";
+  $("tT").style.fill=col;
+  const v=verdictFor(t);$("verdict").innerHTML=v[0]+"<small>"+v[1]+"</small>";
+  $("verdict").style.color=col;
+  [...meter.children].forEach((el,j)=>el.classList.toggle("on",j-3===clamp(t,-3,3)));
+  frames.forEach(f=>{compose({r:P.r,L:P.L,iso:P.iso,stops:t+f.k},f.ctx,...FULL);f.l.textContent=(f.k===0?"Sekarang ":"")+fmt(t+f.k)+" EV"});
+}
+
+/* ---------- kartu efek tiap sudut ---------- */
+const BASEP={r:0,L:0,iso:0,stops:0};
+const CARDS=[
+ {name:"Aperture",sub:"Efek: kedalaman ruang, blur latar",
+  a:{p:{...BASEP,r:APR[0]},cap:"f/1.4"},b:{p:{...BASEP},cap:"f/22"},region:FULL,size:[300,200],
+  rows:[["f kecil, bukaan lebar","Terang. Hanya subjek yang tajam, latar blur. Cocok untuk potret."],["f besar, bukaan sempit","Gelap. Dari dekat sampai jauh tajam. Cocok untuk lanskap."]],
+  pay:"Harga yang dibayar: bukaan lebar butuh lensa mahal dan fokus harus tepat."},
+ {name:"Shutter speed",sub:"Efek: gerakan membeku atau kabur",
+  a:{p:{...BASEP,L:LEN[2]},cap:"1/1000"},b:{p:{...BASEP,L:LEN[8]},cap:"1/15"},region:FULL,size:[300,200],
+  rows:[["Cepat","Gelap. Gerakan membeku. Cocok untuk olahraga dan anak berlari."],["Lambat","Terang. Gerakan kabur, goyangan tangan ikut terlihat. Di bawah 1/60 pakai tripod."]],
+  pay:"Harga yang dibayar: shutter lambat membuat foto buram kalau subjek atau tangan bergerak."},
+ {name:"ISO",sub:"Efek: bintik (noise)",
+  a:{p:{...BASEP,iso:0},cap:"ISO 100"},b:{p:{...BASEP,iso:7},cap:"ISO 12800"},region:[250,290,150,100],size:[150,100],crop:true,
+  rows:[["ISO rendah","Gambar bersih, tapi butuh banyak cahaya."],["ISO tinggi","Foto tetap terang di tempat gelap, dengan bintik dan detail yang berkurang."]],
+  pay:"Harga yang dibayar: makin tinggi ISO, makin kasar gambarnya. Gambar di kartu ini diperbesar supaya bintiknya terlihat."}
+];
+const cardsBox=$("cards");
+CARDS.forEach(c=>{
+  const el=document.createElement("div");el.className="card";
+  el.innerHTML='<div><h3>'+c.name+'</h3><div class="sub">'+c.sub+'</div></div><div class="pair"></div><dl>'+
+    c.rows.map(r=>'<div><dt>'+r[0]+'</dt><dd>'+r[1]+'</dd></div>').join("")+'</dl><p class="pay">'+c.pay+'</p>';
+  const pair=el.querySelector(".pair");
+  [c.a,c.b].forEach(x=>{
+    const f=document.createElement("figure"),cv=document.createElement("canvas");
+    cv.width=c.size[0];cv.height=c.size[1];if(c.crop)cv.className="crop";
+    const cap=document.createElement("figcaption");cap.textContent=x.cap;
+    f.append(cv,cap);pair.appendChild(f);
+    compose(x.p,cv.getContext("2d"),...c.region);
+  });
+  cardsBox.appendChild(el);
+});
+
+/* ---------- tujuan foto ---------- */
+const GOALS=[
+ {t:"Potret, latar blur",set:{scene:1,mode:"av",ap:1,sh:5,iso:0},a:"Bukaan lebar f/2, ISO 100",b:"Shutter"},
+ {t:"Olahraga atau anak berlari",set:{scene:3,mode:"autoiso",ap:2,sh:3,iso:0},a:"Shutter 1/500, bukaan f/2.8",b:"ISO"},
+ {t:"Lanskap tajam",set:{scene:0,mode:"av",ap:6,sh:5,iso:0},a:"Bukaan f/11, ISO 100",b:"Shutter"},
+ {t:"Malam tanpa tripod",set:{scene:4,mode:"autoiso",ap:0,sh:6,iso:0},a:"Bukaan f/1.4, shutter 1/60",b:"ISO"}
+];
+const goalsBox=$("goals");
+GOALS.forEach(gl=>{
+  const el=document.createElement("div");el.className="goal";
+  el.innerHTML='<h3>'+gl.t+'</h3><p><span class="k">Atur sendiri</span>'+gl.a+'</p><p><span class="k">Serahkan ke kamera</span>'+gl.b+'</p>';
+  const b=document.createElement("button");b.type="button";b.textContent="Coba di lab";
+  b.onclick=()=>{Object.assign(st,gl.set,{comp:0});update();
+    const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+    $("view").scrollIntoView({behavior:reduce?"auto":"smooth",block:"center"})};
+  el.appendChild(b);goalsBox.appendChild(el);
+});
+update();
+
+})();
+</script>
+<script>
+function initLens(){
+const $=id=>document.getElementById(id);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const VS="attribute vec2 aPos;void main(){gl_Position=vec4(aPos,0.0,1.0);}";
+const FS=`
+precision highp float;
+uniform vec2 uRes;uniform vec3 uCam;uniform float uFoc;
+float smin(float a,float b,float k){float h=max(k-abs(a-b),0.0)/k;return min(a,b)-h*h*k*0.25;}
+float sdEll(vec3 p,vec3 r){float k0=length(p/r);float k1=length(p/(r*r));return k0*(k0-1.0)/k1;}
+float sdCap(vec3 p,vec3 a,vec3 b,float r){vec3 pa=p-a,ba=b-a;float h=clamp(dot(pa,ba)/dot(ba,ba),0.0,1.0);return length(pa-ba*h)-r;}
+float sdBox(vec3 p,vec3 b){vec3 d=abs(p)-b;return min(max(d.x,max(d.y,d.z)),0.0)+length(max(d,0.0));}
+float sdCyl(vec3 p,float r,float h){vec2 d=abs(vec2(length(p.xz),p.y-h*0.5))-vec2(r,h*0.5);return min(max(d.x,d.y),0.0)+length(max(d,0.0));}
+vec2 mapS(vec3 p){
+  float bs=length(p-vec3(0.0,1.15,0.0))-1.45;
+  if(bs>0.6) return vec2(bs,1.0);
+  vec3 q=vec3(abs(p.x),p.y,p.z);
+  float head=sdEll(p-vec3(0.0,1.65,0.0),vec3(0.42,0.5,0.45));
+  head=smin(head,sdEll(p-vec3(0.0,1.58,0.44),vec3(0.055,0.1,0.075)),0.06);
+  head=smin(head,sdEll(q-vec3(0.42,1.65,-0.02),vec3(0.05,0.1,0.07)),0.04);
+  float skin=smin(head,sdCap(p,vec3(0.0,1.3,0.0),vec3(0.0,1.0,0.0),0.15),0.12);
+  float torso=smin(sdEll(p-vec3(0.0,0.62,0.0),vec3(0.62,0.62,0.3)),sdEll(p-vec3(0.0,1.1,0.0),vec3(0.5,0.16,0.26)),0.18);
+  float hair=max(sdEll(p-vec3(0.0,1.7,-0.04),vec3(0.45,0.52,0.48)),-(p.y-0.6*p.z-1.8)/1.166);
+  hair=min(hair,sdEll(q-vec3(0.16,1.8,0.385),vec3(0.07,0.014,0.02)));
+  float ew=sdEll(q-vec3(0.16,1.735,0.388),vec3(0.055,0.032,0.03));
+  float pu=sdEll(q-vec3(0.16,1.735,0.406),vec3(0.021,0.021,0.016));
+  float mo=sdEll(p-vec3(0.0,1.43,0.395),vec3(0.09,0.018,0.025));
+  vec2 r=vec2(skin,1.0);
+  if(hair<r.x) r=vec2(hair,2.0);
+  if(torso<r.x) r=vec2(torso,3.0);
+  if(ew<r.x) r=vec2(ew,7.0);
+  if(pu<r.x) r=vec2(pu,4.0);
+  if(mo<r.x) r=vec2(mo,5.0);
+  return r;
+}
+vec2 mapO(vec3 p){
+  vec2 r=mapS(p);
+  float s=p.z+3.0;float c=floor(s/6.0+0.5);
+  for(int i=-1;i<=1;i++){
+    float cc=c+float(i);
+    if(cc<=0.0){
+      vec3 q=vec3(abs(p.x),p.y,s-6.0*cc);
+      float lamp=sdCyl(q-vec3(1.9,0.0,0.0),0.07,3.4);
+      float bld=sdBox(q-vec3(5.6,2.6,0.0),vec3(1.8,2.6,2.4));
+      if(lamp<r.x) r=vec2(lamp,8.0);
+      if(bld<r.x) r=vec2(bld,9.0+0.25*mod(abs(cc),4.0));
+    }
+  }
+  return r;
+}
+vec2 map(vec3 p){vec2 r=mapO(p);if(p.y<r.x)r=vec2(p.y,6.0);return r;}
+vec3 calcN(vec3 p,float t){vec2 e=vec2(0.0008+0.0002*t,0.0);
+  return normalize(vec3(map(p+e.xyy).x-map(p-e.xyy).x,map(p+e.yxy).x-map(p-e.yxy).x,map(p+e.yyx).x-map(p-e.yyx).x));}
+float sshadow(vec3 ro,vec3 rd,float k){
+  float res=1.0;float t=0.05;
+  for(int i=0;i<32;i++){
+    float h=map(ro+rd*t).x;
+    res=min(res,k*h/t);
+    t+=clamp(h,0.03,0.6);
+    if(res<0.002||t>14.0)break;
+  }
+  res=clamp(res,0.0,1.0);
+  return res*res*(3.0-2.0*res);
+}
+float calcAO(vec3 p,vec3 n){
+  float o=0.0;float s=1.0;
+  for(int i=1;i<=4;i++){float h=0.03+0.09*float(i);float d=map(p+n*h).x;o+=(h-d)*s;s*=0.7;}
+  return clamp(1.0-1.6*o,0.0,1.0);
+}
+vec3 skyCol(vec3 rd){return mix(vec3(0.75,0.82,0.9),vec3(0.28,0.45,0.8),clamp(rd.y*1.5,0.0,1.0));}
+vec3 albedo(float m,vec3 p,float t){
+  if(m<1.5) return pow(vec3(0.88,0.68,0.56),vec3(2.2));
+  if(m<2.5) return pow(vec3(0.16,0.11,0.08),vec3(2.2));
+  if(m<3.5) return pow(vec3(0.45,0.5,0.6),vec3(2.2));
+  if(m<4.5) return vec3(0.01);
+  if(m<5.5) return pow(vec3(0.62,0.28,0.30),vec3(2.2));
+  if(m<6.5){
+    float par=mod(floor(p.x)+floor(p.z),2.0);
+    vec3 a=mix(vec3(0.20),vec3(0.13),par);
+    return mix(a,vec3(0.165),smoothstep(8.0,40.0,t));
+  }
+  if(m<7.5) return vec3(0.75);
+  if(m<8.5) return vec3(0.22);
+  float k=floor((m-9.0)*4.0+0.5);
+  if(k<0.5) return pow(vec3(0.78,0.45,0.35),vec3(2.2));
+  if(k<1.5) return pow(vec3(0.9,0.85,0.7),vec3(2.2));
+  if(k<2.5) return pow(vec3(0.35,0.6,0.62),vec3(2.2));
+  return pow(vec3(0.85,0.65,0.25),vec3(2.2));
+}
+void main(){
+  vec2 uv=(gl_FragCoord.xy-0.5*uRes)/(0.5*uRes.y);
+  vec3 ro=uCam;vec3 ta=vec3(0.0,1.4,0.0);
+  vec3 f=normalize(ta-ro);
+  vec3 r=normalize(cross(f,vec3(0.0,1.0,0.0)));
+  vec3 u=cross(r,f);
+  vec3 rd=normalize(f*uFoc+r*uv.x+u*uv.y);
+  float tf=(rd.y<-0.0005)?(-ro.y/rd.y):1000.0;
+  float tmax=min(tf,120.0);
+  float t=0.2;float m=-1.0;
+  for(int i=0;i<150;i++){
+    vec2 h=mapO(ro+rd*t);
+    if(h.x<0.0006*t){m=h.y;break;}
+    t+=h.x;
+    if(t>tmax)break;
+  }
+  vec3 col;vec3 sky=skyCol(rd);
+  vec3 p;vec3 n;bool hit=false;
+  if(m>0.0){hit=true;p=ro+rd*t;n=calcN(p,t);}
+  else if(tf<120.0){hit=true;t=tf;m=6.0;p=ro+rd*t;n=vec3(0.0,1.0,0.0);}
+  if(hit){
+    vec3 v=-rd;
+    vec3 alb=albedo(m,p,t);
+    vec3 L=normalize(vec3(0.5,0.85,0.55));
+    float occ=calcAO(p,n);
+    vec3 amb=mix(vec3(0.07,0.06,0.05),vec3(0.16,0.2,0.3),n.y*0.5+0.5);
+    col=alb*amb*occ;
+    float wrap=(m<1.5)?0.25:0.0;
+    float d=clamp((dot(n,L)+wrap)/(1.0+wrap),0.0,1.0);
+    if(d>0.0){
+      float sh=sshadow(p+n*0.02,L,10.0);
+      vec3 H=normalize(L+v);
+      float gl=(m<1.5)?30.0:((m<2.5)?60.0:20.0);
+      float sp=(m<1.5)?0.12:((m<2.5)?0.35:((m<3.5)?0.02:((m<5.5||(m>6.5&&m<7.5))?0.4:0.0)));
+      float s=pow(max(dot(n,H),0.0),gl)*sp;
+      col+=(alb*d+vec3(s))*vec3(1.0,0.95,0.86)*1.6*sh*mix(1.0,occ,0.5);
+    }
+    col=mix(col,sky,1.0-exp(-t*0.012));
+  } else col=sky;
+  col=(col*(2.51*col+0.03))/(col*(2.43*col+0.59)+0.14);
+  col=pow(clamp(col,0.0,1.0),vec3(1.0/2.2));
+  vec2 q2=gl_FragCoord.xy/uRes-0.5;
+  col*=1.0-0.3*dot(q2,q2);
+  gl_FragColor=vec4(col,1.0);
+}`;
+function makeGL(canvas){
+  const gl=canvas.getContext("webgl",{antialias:false,preserveDrawingBuffer:true})||canvas.getContext("experimental-webgl");
+  if(!gl)return null;
+  const sh=(type,src)=>{const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);
+    if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){console.error("shader",gl.getShaderInfoLog(s));return null}return s};
+  const vs=sh(gl.VERTEX_SHADER,VS),fs=sh(gl.FRAGMENT_SHADER,FS);
+  if(!vs||!fs)return null;
+  const pr=gl.createProgram();gl.attachShader(pr,vs);gl.attachShader(pr,fs);gl.linkProgram(pr);
+  if(!gl.getProgramParameter(pr,gl.LINK_STATUS)){console.error("link",gl.getProgramInfoLog(pr));return null}
+  gl.useProgram(pr);
+  const buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  const loc=gl.getAttribLocation(pr,"aPos");gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+  const U={};["uRes","uCam","uFoc"].forEach(n=>U[n]=gl.getUniformLocation(pr,n));
+  return{draw(D,fe){
+    gl.viewport(0,0,canvas.width,canvas.height);
+    gl.uniform2f(U.uRes,canvas.width,canvas.height);
+    gl.uniform3f(U.uCam,0,1.45,D);gl.uniform1f(U.uFoc,fe/18);
+    gl.drawArrays(gl.TRIANGLES,0,3);
+  }};
+}
+
+const CROP=[1,1.5];
+const LENSES=[
+ {n:"Semua panjang fokus",min:18,max:200,f:null,note:"Mode belajar: semua panjang fokus bisa dicoba tanpa batas lensa."},
+ {n:"Kit 18–55 mm",min:18,max:55,f:[3.5,5.6],crop:1,note:"Lensa bawaan kamera APS-C. Zoom praktis dan murah, tapi bukaannya kecil dan makin kecil saat di-zoom ke 55 mm."},
+ {n:"Zoom 24–70 mm f/2.8",min:24,max:70,f:[2.8,2.8],note:"Zoom standar fotografer acara dan wedding. Satu lensa untuk foto lebar sampai potret, bukaan tetap f/2.8."},
+ {n:"Zoom 70–200 mm f/2.8",min:70,max:200,f:[2.8,2.8],note:"Zoom tele untuk potret dari jauh, panggung, dan olahraga. Latar rapat dan blur, tapi besar dan berat."},
+ {n:"Fix 35 mm f/1.8",min:35,max:35,f:[1.8,1.8],note:"Lensa fix untuk jalanan dan dokumenter. Tidak bisa zoom, tapi ringan dan bukaannya lebar."},
+ {n:"Fix 50 mm f/1.8",min:50,max:50,f:[1.8,1.8],note:"Lensa fix paling murah dan serba bisa. Tidak bisa zoom, tapi bukaan f/1.8 membuat latar blur dan kuat di tempat gelap."},
+ {n:"Fix 85 mm f/1.8",min:85,max:85,f:[1.8,1.8],note:"Lensa fix khusus potret. Wajah proporsional dan latar lembut. Tidak bisa zoom."}
+];
+const GAL=[[24,"Sudut lebar. Ruang sempit dan arsitektur."],[35,"Jalanan dan dokumenter."],[50,"Pandangan natural. Serba bisa."],[85,"Lensa potret klasik."],[135,"Potret dari jauh. Latar rapat."],[200,"Tele. Latar sangat rapat."]];
+const st={lens:0,mm:50,crop:0,mode:0};
+const FIX=3.5;
+const frameD=fe=>clamp(2.5*fe/36,0.85,24);
+const distNow=fe=>st.mode===0?frameD(fe):FIX;
+const toV=mm=>Math.round(1000*Math.log(mm/18)/Math.log(200/18));
+const fromV=v=>Math.round(18*Math.pow(200/18,v/1000));
+const isPrime=()=>LENSES[st.lens].min===LENSES[st.lens].max;
+const STOPS=[1.8,2.8,3.5,4,4.5,5,5.6];
+function maxAperture(mm){
+  const L=LENSES[st.lens];if(!L.f)return null;
+  if(L.f[0]===L.f[1])return L.f[0];
+  const t=Math.log(mm/L.min)/Math.log(L.max/L.min),f=L.f[0]+(L.f[1]-L.f[0])*t;
+  return STOPS.reduce((a,b)=>Math.abs(b-f)<Math.abs(a-f)?b:a);
+}
+
+const view=$("lnView");
+const gl=makeGL(view);
+if(!gl){view.parentElement.innerHTML='<div style="padding:40px 16px;text-align:center;color:var(--vf-mute)">Browser ini tidak mendukung WebGL, jadi foto 3D tidak bisa ditampilkan.</div>'}
+
+function chipRow(id,items,get,set){
+  const box=$(id);
+  items.forEach((t,i)=>{const b=document.createElement("button");b.type="button";b.textContent=t;b.onclick=()=>{set(i);update()};box.appendChild(b)});
+  return()=>[...box.children].forEach((b,i)=>b.setAttribute("aria-pressed",get()===i));
+}
+const syncLens=chipRow("lnLens",LENSES.map(l=>l.n),()=>st.lens,i=>{
+  st.lens=i;const L=LENSES[i];
+  if(L.crop!==undefined)st.crop=L.crop;
+  st.mm=clamp(st.mm,L.min,L.max);
+  if(L.min===L.max)st.mode=0;
+});
+const syncSensor=chipRow("lnSensor",["Full frame","APS-C (×1,5)"],()=>st.crop,i=>{st.crop=i});
+const syncMode=chipRow("lnMode",["Subjek tetap sama besar","Diam di tempat, cuma zoom"],()=>st.mode,i=>{st.mode=i});
+$("lnFocal").addEventListener("input",e=>{st.mm=clamp(fromV(+e.target.value),LENSES[st.lens].min,LENSES[st.lens].max);update()});
+
+const gallery=$("lnGallery"),gctx=[];
+GAL.forEach(g=>{
+  const b=document.createElement("button");b.type="button";b.className="pick";b.id="lp_"+g[0];
+  b.innerHTML='<canvas width="120" height="180"></canvas><b>'+g[0]+' mm</b><span>'+g[1]+'</span>';
+  b.onclick=()=>{
+    const L=LENSES[st.lens];if(g[0]<L.min||g[0]>L.max)st.lens=0;
+    st.mm=g[0];st.mode=0;update();
+    const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+    view.scrollIntoView({behavior:reduce?"auto":"smooth",block:"center"})};
+  gallery.appendChild(b);gctx.push(b.querySelector("canvas").getContext("2d"));
+});
+if(gl){
+  const tc=document.createElement("canvas");tc.width=120;tc.height=180;
+  const tgl=makeGL(tc);
+  if(tgl)requestAnimationFrame(()=>GAL.forEach((g,i)=>{tgl.draw(frameD(g[0]),g[0]);gctx[i].drawImage(tc,0,0)}));
+}
+
+const kind=fe=>fe<26?"Ultra lebar":fe<40?"Lebar":fe<70?"Normal":fe<110?"Potret":fe<170?"Tele pendek":"Tele";
+function faceText(D){
+  if(D<1.0)return"Hidung dan dahi tampak besar, wajah melebar. Biasanya dihindari untuk potret.";
+  if(D<1.5)return"Wajah agak melebar dan terasa dekat. Cocok untuk foto yang akrab dan santai.";
+  if(D<3.2)return"Proporsi wajah natural, mirip pandangan mata.";
+  if(D<6)return"Wajah sedikit memipih dan lebih enak dilihat. Inilah alasan lensa 85 mm disukai untuk potret.";
+  return"Wajah memipih dan terasa jauh. Latar seperti menempel di belakang subjek.";
+}
+function bgText(fe){
+  if(st.mode===1)return"Susunan latar sama seperti sebelumnya, gambar hanya dipotong. Perspektif ditentukan jarak, bukan lensa.";
+  if(fe<35)return"Latar terlihat luas. Gedung dan lampu jalan tampak berjauhan.";
+  if(fe>=100)return"Latar terlihat rapat. Gedung dan lampu jalan seperti menumpuk.";
+  return"Latar terlihat wajar.";
+}
+function drawPlan(fe,D){
+  const s=100/D,sy=190,cy=290,tan=12/fe;
+  let h='<rect x="1" y="1" width="298" height="318" rx="12" fill="none" stroke="var(--line)"/>';
+  for(let k=0;k>-14;k--){
+    const zc=-3+6*k,y1=sy+s*(zc-2.4),y2=sy+s*(zc+2.4);
+    [-1,1].forEach(sg=>{
+      const x1=150+sg*s*3.8,x2=150+sg*s*7.4;
+      h+='<rect x="'+Math.min(x1,x2).toFixed(1)+'" y="'+y1.toFixed(1)+'" width="'+Math.abs(x2-x1).toFixed(1)+'" height="'+(y2-y1).toFixed(1)+'" fill="var(--line)"/>';
+      h+='<circle cx="'+(150+sg*s*1.9).toFixed(1)+'" cy="'+(sy+s*zc).toFixed(1)+'" r="'+Math.max(1.5,s*0.07).toFixed(1)+'" fill="var(--muted)"/>';
+    });
+  }
+  const L=300,dx=L*tan;
+  h+='<polygon points="150,'+cy+' '+(150-dx).toFixed(1)+','+(cy-L)+' '+(150+dx).toFixed(1)+','+(cy-L)+'" fill="var(--accent)" opacity=".13"/>';
+  h+='<line x1="150" y1="'+cy+'" x2="'+(150-dx).toFixed(1)+'" y2="'+(cy-L)+'" stroke="var(--accent)" stroke-width="1.5"/><line x1="150" y1="'+cy+'" x2="'+(150+dx).toFixed(1)+'" y2="'+(cy-L)+'" stroke="var(--accent)" stroke-width="1.5"/>';
+  h+='<line x1="150" y1="'+sy+'" x2="150" y2="'+cy+'" stroke="var(--muted)" stroke-dasharray="3 4"/>';
+  const r=clamp(s*0.45,5,40);
+  h+='<circle cx="150" cy="'+sy+'" r="'+r.toFixed(1)+'" fill="var(--muted)" opacity=".7"/><text x="'+(150+r+6).toFixed(1)+'" y="'+(sy+4)+'">SUBJEK</text>';
+  h+='<text x="158" y="'+((sy+cy)/2+(r>20?10:0)).toFixed(1)+'">'+D.toFixed(1).replace(".",",")+' m</text>';
+  h+='<g transform="translate(150 '+cy+')"><rect x="-16" y="-8" width="32" height="20" rx="4" fill="var(--ink)"/><circle cx="0" cy="2" r="6" fill="var(--bg)"/><rect x="-6" y="-12" width="12" height="5" rx="2" fill="var(--ink)"/></g><text x="150" y="316" text-anchor="middle">KAMERA</text>';
+  $("lnPlan").innerHTML=h;
+}
+let raf=0;
+function update(){
+  const L=LENSES[st.lens],mm=st.mm,fe=mm*CROP[st.crop],D=distNow(fe),prime=isPrime();
+  const sl=$("lnFocal");sl.min=toV(L.min);sl.max=toV(L.max);sl.value=toV(mm);sl.disabled=prime;
+  $("lnMin").textContent=prime?"Fix "+L.min+" mm, tidak bisa zoom":L.min+" mm";
+  $("lnMax").textContent=prime?"":L.max+" mm";
+  $("lnLensNote").textContent=L.note;
+  syncLens();
+  $("lnVal").textContent=mm+" mm"+(st.crop?" (setara "+Math.round(fe)+" mm)":"");
+  syncSensor();syncMode();$("lnMode").children[1].disabled=prime;
+  $("lnSensorNote").textContent=st.crop?"APS-C memotong gambar 1,5 kali, jadi lensa 50 mm terlihat seperti 75 mm.":"Full frame: panjang fokus sama dengan yang tertulis di lensa.";
+  $("lnModeNote").textContent=prime?"Lensa fix tidak bisa zoom, jadi kamu yang maju atau mundur. Fotografer menyebutnya zoom pakai kaki.":st.mode===0?"Kamera maju atau mundur sampai subjek tetap sebesar ini. Lihat bagaimana wajah dan latar berubah.":"Kamera diam di 3,5 m dan hanya zoom. Bentuk wajah dan susunan latar tetap sama, gambar hanya dipotong.";
+  const fov=2*Math.atan(43.27/(2*fe))*180/Math.PI;
+  $("lnTitle").textContent=mm+" mm · "+kind(fe);
+  const fa=maxAperture(mm);
+  $("lnStats").textContent="Jarak "+D.toFixed(1).replace(".",",")+" m · sudut pandang "+Math.round(fov)+"°"+(fa?" · bukaan maks f/"+String(fa).replace(".",","):"");
+  $("lnFace").textContent=faceText(D);
+  $("lnBg").textContent=bgText(fe);
+  GAL.forEach(g=>$("lp_"+g[0]).setAttribute("aria-pressed",g[0]===mm&&st.crop===0&&st.mode===0));
+  drawPlan(fe,D);
+  if(gl&&!raf)raf=requestAnimationFrame(()=>{raf=0;gl.draw(D,fe)});
+}
+update();
+
+}
+</script>
+<script>
+function initLight(){
+
+const $=id=>document.getElementById(id);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+/* ---------- data ---------- */
+const LIGHTS=[
+  {id:"key",name:"Key light",letter:"K",role:"Lampu utama. Menentukan bentuk wajah.",css:"var(--key)",ring:98},
+  {id:"fill",name:"Fill light",letter:"F",role:"Mengisi bayangan supaya tidak terlalu gelap.",css:"var(--fill)",ring:124},
+  {id:"back",name:"Back light",letter:"B",role:"Dari belakang. Memberi garis cahaya di tepi rambut dan bahu.",css:"var(--back)",ring:68}
+];
+const PRESETS=[
+ {id:"rembrandt",name:"Rembrandt",desc:"Segitiga cahaya di pipi. Klasik dan dramatis.",
+  key:{on:true,p:.85,az:45,el:40,soft:false},fill:{on:true,p:.2,az:-35,el:5},back:{on:true,p:.35,az:150,el:35,col:0}},
+ {id:"butterfly",name:"Butterfly",desc:"Bayangan kupu-kupu di bawah hidung.",
+  key:{on:true,p:.85,az:0,el:50,soft:true},fill:{on:true,p:.3,az:0,el:-15},back:{on:true,p:.35,az:160,el:40,col:0}},
+ {id:"loop",name:"Loop",desc:"Bayangan hidung melengkung. Aman untuk semua wajah.",
+  key:{on:true,p:.8,az:35,el:22,soft:true},fill:{on:true,p:.3,az:-40,el:8},back:{on:true,p:.4,az:-150,el:35,col:0}},
+ {id:"split",name:"Split",desc:"Setengah wajah terang, setengah gelap.",
+  key:{on:true,p:.9,az:90,el:5,soft:false},fill:{on:false,p:.3,az:-35,el:10},back:{on:false,p:.4,az:150,el:35,col:0}},
+ {id:"rim",name:"Rim light",desc:"Garis cahaya di tepi rambut dan bahu.",
+  key:{on:true,p:.3,az:25,el:20,soft:true},fill:{on:false,p:.3,az:-35,el:10},back:{on:true,p:1,az:140,el:30,col:0}},
+ {id:"flat",name:"Datar",desc:"Hampir tanpa bayangan. Cocok untuk pas foto.",
+  key:{on:true,p:.7,az:0,el:20,soft:true},fill:{on:true,p:.6,az:0,el:-5},back:{on:false,p:.4,az:150,el:35,col:0}}
+];
+const TIPS={
+ rembrandt:["Rembrandt","Cari segitiga kecil cahaya di pipi sisi gelap. Kesan klasik dan dramatis, cocok untuk potret pria dan editorial."],
+ butterfly:["Butterfly","Bayangan kecil berbentuk kupu-kupu di bawah hidung dan tulang pipi tegas. Cocok untuk beauty dan wajah oval."],
+ loop:["Loop","Bayangan hidung membentuk lengkung kecil di pipi tanpa menyentuh bayangan pipi. Pola paling aman untuk hampir semua wajah."],
+ split:["Split","Setengah wajah terang dan setengah gelap. Sangat dramatis, cocok untuk potret karakter."],
+ rim:["Rim light","Lampu belakang membuat garis cahaya di tepi rambut dan bahu. Memisahkan subjek dari latar gelap."],
+ flat:["Datar","Cahaya dari depan, hampir tanpa bayangan. Wajah rata dan bersih. Cocok untuk pas foto, katalog, dan kulit yang ingin disamarkan."],
+ other:["Posisi bebas","Perhatikan arah bayangan hidung dan di bawah dagu, lalu geser lampu sampai bentuk wajah terlihat."],
+ none:["Key light mati","Foto hanya mengandalkan lampu lain. Nyalakan key light untuk membentuk wajah."]
+};
+const BGS=[["Abu",0.2],["Putih",0.7],["Hitam",0.02]];
+const BACKCOLS=[["Putih",[1,1,1]],["Hangat",[1,0.72,0.45]],["Biru",[0.55,0.7,1]]];
+const GAIN=1.3;
+const st={key:{},fill:{},back:{},bg:0,exp:0,preset:null};
+function applyPreset(p){
+  st.key={...p.key};st.fill={...p.fill};st.back={...p.back};st.preset=p.id;
+}
+
+/* ---------- shader ---------- */
+const VS="attribute vec2 aPos;void main(){gl_Position=vec4(aPos,0.0,1.0);}";
+const FS=`
+precision highp float;
+uniform vec2 uRes;
+uniform vec3 uKd,uFd,uBd,uKc,uFc,uBc;
+uniform float uKs,uBg,uExp;
+float smin(float a,float b,float k){float h=max(k-abs(a-b),0.0)/k;return min(a,b)-h*h*k*0.25;}
+float sdEll(vec3 p,vec3 r){float k0=length(p/r);float k1=length(p/(r*r));return k0*(k0-1.0)/k1;}
+float sdCap(vec3 p,vec3 a,vec3 b,float r){vec3 pa=p-a,ba=b-a;float h=clamp(dot(pa,ba)/dot(ba,ba),0.0,1.0);return length(pa-ba*h)-r;}
+vec2 map(vec3 p){
+  vec3 q=vec3(abs(p.x),p.y,p.z);
+  float head=sdEll(p-vec3(0.0,1.65,0.0),vec3(0.42,0.5,0.45));
+  head=smin(head,sdEll(p-vec3(0.0,1.58,0.44),vec3(0.055,0.1,0.075)),0.06);
+  head=smin(head,sdEll(q-vec3(0.42,1.65,-0.02),vec3(0.05,0.1,0.07)),0.04);
+  float skin=smin(head,sdCap(p,vec3(0.0,1.3,0.0),vec3(0.0,1.0,0.0),0.15),0.12);
+  float torso=smin(sdEll(p-vec3(0.0,0.62,0.0),vec3(0.62,0.62,0.3)),sdEll(p-vec3(0.0,1.1,0.0),vec3(0.5,0.16,0.26)),0.18);
+  float hair=max(sdEll(p-vec3(0.0,1.7,-0.04),vec3(0.45,0.52,0.48)),-(p.y-0.6*p.z-1.8)/1.166);
+  hair=min(hair,sdEll(q-vec3(0.16,1.8,0.385),vec3(0.07,0.014,0.02)));
+  float ew=sdEll(q-vec3(0.16,1.735,0.388),vec3(0.055,0.032,0.03));
+  float pu=sdEll(q-vec3(0.16,1.735,0.406),vec3(0.021,0.021,0.016));
+  float mo=sdEll(p-vec3(0.0,1.43,0.395),vec3(0.09,0.018,0.025));
+  float bg=smin(p.y,p.z+2.4,0.7);
+  vec2 r=vec2(bg,6.0);
+  if(skin<r.x) r=vec2(skin,1.0);
+  if(hair<r.x) r=vec2(hair,2.0);
+  if(torso<r.x) r=vec2(torso,3.0);
+  if(ew<r.x) r=vec2(ew,7.0);
+  if(pu<r.x) r=vec2(pu,4.0);
+  if(mo<r.x) r=vec2(mo,5.0);
+  return r;
+}
+vec3 calcN(vec3 p){vec2 e=vec2(0.0015,0.0);
+  return normalize(vec3(map(p+e.xyy).x-map(p-e.xyy).x,map(p+e.yxy).x-map(p-e.yxy).x,map(p+e.yyx).x-map(p-e.yyx).x));}
+float sshadow(vec3 ro,vec3 rd,float k){
+  float res=1.0;float t=0.05;
+  for(int i=0;i<40;i++){
+    float h=map(ro+rd*t).x;
+    res=min(res,k*h/t);
+    t+=clamp(h,0.02,0.4);
+    if(res<0.002||t>8.0)break;
+  }
+  res=clamp(res,0.0,1.0);
+  return res*res*(3.0-2.0*res);
+}
+float calcAO(vec3 p,vec3 n){
+  float o=0.0;float s=1.0;
+  for(int i=1;i<=5;i++){float h=0.02+0.07*float(i);float d=map(p+n*h).x;o+=(h-d)*s;s*=0.7;}
+  return clamp(1.0-2.0*o,0.0,1.0);
+}
+vec3 lightOne(vec3 p,vec3 n,vec3 v,vec3 L,vec3 C,float k,float useSh,float m,vec3 alb){
+  if(dot(C,C)<0.00001) return vec3(0.0);
+  float wrap=(m<1.5)?0.25:0.0;
+  float nl=dot(n,L);
+  float d=clamp((nl+wrap)/(1.0+wrap),0.0,1.0);
+  if(d<=0.0) return vec3(0.0);
+  float sh=1.0;
+  if(useSh>0.5) sh=sshadow(p+n*0.02,L,k);
+  vec3 H=normalize(L+v);
+  float gl=(m<1.5)?30.0:((m<2.5)?60.0:((m<3.5)?10.0:20.0));
+  float sp=(m<1.5)?0.12:((m<2.5)?0.35:((m<3.5)?0.02:((m>5.5&&m<6.5)?0.0:0.4)));
+  float s=pow(max(dot(n,H),0.0),gl)*sp*step(0.0,nl);
+  return (alb*d+vec3(s))*C*sh;
+}
+vec3 albedo(float m){
+  if(m<1.5) return pow(vec3(0.88,0.68,0.56),vec3(2.2));
+  if(m<2.5) return pow(vec3(0.16,0.11,0.08),vec3(2.2));
+  if(m<3.5) return pow(vec3(0.45,0.5,0.6),vec3(2.2));
+  if(m<4.5) return vec3(0.01);
+  if(m<5.5) return pow(vec3(0.62,0.28,0.30),vec3(2.2));
+  if(m<6.5) return vec3(uBg);
+  return vec3(0.75);
+}
+void main(){
+  vec2 uv=(gl_FragCoord.xy-0.5*uRes)/(0.5*uRes.y);
+  vec3 ro=vec3(0.0,1.5,4.8);
+  vec3 ta=vec3(0.0,1.36,0.0);
+  vec3 f=normalize(ta-ro);
+  vec3 r=normalize(cross(f,vec3(0.0,1.0,0.0)));
+  vec3 u=cross(r,f);
+  vec3 rd=normalize(f*4.6+r*uv.x+u*uv.y);
+  float t=0.5;float m=-1.0;
+  for(int i=0;i<100;i++){
+    vec2 h=map(ro+rd*t);
+    if(h.x<0.0007*t){m=h.y;break;}
+    t+=h.x;
+    if(t>16.0)break;
+  }
+  vec3 col=vec3(0.0);
+  if(m>0.0){
+    vec3 p=ro+rd*t;vec3 n=calcN(p);vec3 v=-rd;
+    vec3 alb=albedo(m);
+    float occ=calcAO(p,n);
+    col=alb*(0.05+0.05*n.y)*occ;
+    float od=mix(1.0,occ,0.5);
+    col+=od*lightOne(p,n,v,uKd,uKc,uKs,1.0,m,alb);
+    col+=od*lightOne(p,n,v,uFd,uFc,10.0,0.0,m,alb);
+    col+=od*lightOne(p,n,v,uBd,uBc,10.0,1.0,m,alb);
+  }
+  col*=exp2(uExp);
+  col=(col*(2.51*col+0.03))/(col*(2.43*col+0.59)+0.14);
+  col=pow(clamp(col,0.0,1.0),vec3(1.0/2.2));
+  vec2 q2=gl_FragCoord.xy/uRes-0.5;
+  col*=1.0-0.35*dot(q2,q2);
+  gl_FragColor=vec4(col,1.0);
+}`;
+
+function makeGL(canvas){
+  const gl=canvas.getContext("webgl",{antialias:false,preserveDrawingBuffer:true})||canvas.getContext("experimental-webgl");
+  if(!gl)return null;
+  const sh=(type,src)=>{const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);
+    if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){console.error("shader",gl.getShaderInfoLog(s));return null}return s};
+  const vs=sh(gl.VERTEX_SHADER,VS),fs=sh(gl.FRAGMENT_SHADER,FS);
+  if(!vs||!fs)return null;
+  const pr=gl.createProgram();gl.attachShader(pr,vs);gl.attachShader(pr,fs);gl.linkProgram(pr);
+  if(!gl.getProgramParameter(pr,gl.LINK_STATUS)){console.error("link",gl.getProgramInfoLog(pr));return null}
+  gl.useProgram(pr);
+  const buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  const loc=gl.getAttribLocation(pr,"aPos");gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+  const U={};["uRes","uKd","uFd","uBd","uKc","uFc","uBc","uKs","uBg","uExp"].forEach(n=>U[n]=gl.getUniformLocation(pr,n));
+  return{draw(P){
+    gl.viewport(0,0,canvas.width,canvas.height);
+    gl.uniform2f(U.uRes,canvas.width,canvas.height);
+    gl.uniform3fv(U.uKd,P.kd);gl.uniform3fv(U.uFd,P.fd);gl.uniform3fv(U.uBd,P.bd);
+    gl.uniform3fv(U.uKc,P.kc);gl.uniform3fv(U.uFc,P.fc);gl.uniform3fv(U.uBc,P.bc);
+    gl.uniform1f(U.uKs,P.ks);gl.uniform1f(U.uBg,P.bg);gl.uniform1f(U.uExp,P.exp);
+    gl.drawArrays(gl.TRIANGLES,0,3);
+  }};
+}
+function dirOf(az,el){const a=az*Math.PI/180,e=el*Math.PI/180;return[Math.cos(e)*Math.sin(a),Math.sin(e),Math.cos(e)*Math.cos(a)]}
+function params(s){
+  const col=(L,c)=>L.on?c.map(x=>x*L.p*GAIN):[0,0,0];
+  return{kd:dirOf(s.key.az,s.key.el),kc:col(s.key,[1,0.97,0.92]),ks:s.key.soft?5:22,
+    fd:dirOf(s.fill.az,s.fill.el),fc:col(s.fill,[1,1,1]),
+    bd:dirOf(s.back.az,s.back.el),bc:col(s.back,BACKCOLS[s.back.col||0][1]),
+    bg:BGS[s.bg][1],exp:s.exp};
+}
+
+/* ---------- penjelasan otomatis ---------- */
+function classify(){
+  const k=st.key,b=st.back;
+  if(!k.on||k.p<0.05)return(b.on&&b.p>0.3)?"rim":"none";
+  if(b.on&&b.p>k.p*1.15)return"rim";
+  const a=Math.abs(k.az),e=k.el;
+  if(a>=70&&a<=125&&e<40)return"split";
+  if(a<=14&&e>=35)return"butterfly";
+  if(a>=25&&a<=65&&e>=30&&e<=65)return"rembrandt";
+  if(a>=15&&a<=60&&e>=5&&e<35)return"loop";
+  if(a<=14&&e<35)return"flat";
+  return"other";
+}
+function ratioText(){
+  const k=st.key;
+  if(!k.on)return"Key light mati";
+  const fp=st.fill.on?st.fill.p:0;
+  if(fp<0.03)return"Rasio key : fill = tanpa fill · sangat dramatis";
+  const r=(k.p+fp)/fp;
+  const w=r<2.5?"datar dan lembut":r<4.5?"natural":r<7?"dramatis":"sangat dramatis";
+  return"Rasio key : fill = "+(r<4?r.toFixed(1):Math.round(r))+" : 1 · "+w;
+}
+const elWord=e=>e<-5?"Dari bawah":e<10?"Setinggi mata":e<30?"Agak tinggi":e<55?"Tinggi":"Sangat tinggi";
+const azText=a=>{const r=Math.round(a);return r===0?"0° depan":Math.abs(r)+"° "+(r>0?"kanan":"kiri")+(Math.abs(r)>90?" (belakang)":"")};
+
+/* ---------- UI: kartu lampu ---------- */
+const cards=$("lcards");
+LIGHTS.forEach(L=>{
+  const el=document.createElement("div");el.className="lcard";el.id="c_"+L.id;
+  let extra="";
+  if(L.id==="key")extra='<div class="dial"><div class="lb">Kualitas cahaya</div><div class="chips" id="softchips" style="margin-top:6px"></div></div>';
+  if(L.id==="back")extra='<div class="dial"><div class="lb">Warna cahaya</div><div class="chips" id="colchips" style="margin-top:6px"></div></div>';
+  el.innerHTML=
+   '<div class="lhead"><span class="dot" style="background:'+L.css+'"></span><div><h3>'+L.name+'</h3><p class="note">'+L.role+'</p></div>'+
+   '<label class="sw"><input type="checkbox" id="on_'+L.id+'"><span>Nyala</span></label></div>'+
+   '<div class="dial"><div class="row"><span class="lb">Sudut</span><span class="val" id="va_'+L.id+'"></span></div><p class="note">Geser titiknya di denah</p></div>'+
+   '<div class="dial"><div class="row"><label for="e_'+L.id+'">Tinggi</label><span class="val" id="ve_'+L.id+'"></span></div><input type="range" id="e_'+L.id+'" min="0" max="100"></div>'+
+   '<div class="dial"><div class="row"><label for="p_'+L.id+'">Terang</label><span class="val" id="vp_'+L.id+'"></span></div><input type="range" id="p_'+L.id+'" min="0" max="100"></div>'+extra;
+  cards.appendChild(el);
+});
+function chipRow(id,items,get,set){
+  const box=$(id);
+  items.forEach((it,i)=>{const b=document.createElement("button");b.type="button";b.textContent=it;b.onclick=()=>{set(i);update()};box.appendChild(b)});
+  return()=>[...box.children].forEach((b,i)=>b.setAttribute("aria-pressed",get()===i));
+}
+const syncSoft=chipRow("softchips",["Lembut","Keras"],()=>st.key.soft?0:1,i=>{st.key.soft=i===0;st.preset=null});
+const syncCol=chipRow("colchips",BACKCOLS.map(c=>c[0]),()=>st.back.col||0,i=>{st.back.col=i;st.preset=null});
+const syncBg=chipRow("bgchips",BGS.map(b=>b[0]),()=>st.bg,i=>{st.bg=i;thumbsDirty()});
+LIGHTS.forEach(L=>{
+  $("on_"+L.id).addEventListener("change",e=>{st[L.id].on=e.target.checked;st.preset=null;update()});
+  $("p_"+L.id).addEventListener("input",e=>{st[L.id].p=e.target.value/100;st.preset=null;update()});
+  $("e_"+L.id).addEventListener("input",e=>{st[L.id].el=e.target.value-20;st.preset=null;update()});
+});
+$("exp").addEventListener("input",e=>{st.exp=+e.target.value;thumbsDirty();update()});
+
+/* ---------- denah ---------- */
+const plan=$("plan"),CX=150,CY=150;
+let ph='<rect x="1" y="1" width="298" height="328" rx="12" fill="none" stroke="var(--line)"/>'+
+ '<line x1="50" y1="24" x2="250" y2="24" stroke="var(--muted)" stroke-width="5" stroke-linecap="round"/><text x="150" y="42" text-anchor="middle">LATAR</text>';
+LIGHTS.forEach(L=>{ph+='<circle class="ring" cx="150" cy="150" r="'+L.ring+'"/>'});
+LIGHTS.forEach(L=>{ph+='<line id="ln_'+L.id+'" x1="150" y1="150" x2="150" y2="150" stroke="'+L.css+'" stroke-width="2" opacity=".55"/>'});
+ph+='<circle cx="150" cy="150" r="20" fill="var(--muted)" opacity=".55"/><polygon points="150,178 143,168 157,168" fill="var(--muted)" opacity=".55"/>'+
+ '<text x="150" y="154" text-anchor="middle" style="fill:var(--surface)">SUBJEK</text>';
+ph+='<g transform="translate(150 306)"><rect x="-16" y="-10" width="32" height="20" rx="4" fill="var(--ink)"/><circle cx="0" cy="0" r="6" fill="var(--bg)"/><rect x="-6" y="-14" width="12" height="5" rx="2" fill="var(--ink)"/></g><text x="150" y="326" text-anchor="middle">KAMERA</text>';
+LIGHTS.forEach(L=>{
+  ph+='<g data-l="'+L.id+'" id="g_'+L.id+'" tabindex="0" role="slider" aria-label="Sudut '+L.name+'" aria-valuemin="-180" aria-valuemax="180">'+
+   '<circle r="22" fill="transparent"/><circle r="14" fill="'+L.css+'"/><text class="dotl" y="4">'+L.letter+'</text></g>';
+});
+plan.innerHTML=ph;
+function normAz(a){a=((a+180)%360+360)%360-180;return a===-180?180:a}
+function setAz(id,a){st[id].az=Math.round(normAz(a));st.preset=null;update()}
+let drag=null;
+plan.addEventListener("pointerdown",e=>{
+  const g=e.target.closest("[data-l]");if(!g)return;
+  drag=g.dataset.l;plan.setPointerCapture(e.pointerId);g.focus({preventScroll:true});e.preventDefault();
+});
+plan.addEventListener("pointermove",e=>{
+  if(!drag)return;
+  const r=plan.getBoundingClientRect();
+  const x=(e.clientX-r.left)*300/r.width-CX,y=(e.clientY-r.top)*330/r.height-CY;
+  setAz(drag,Math.atan2(x,y)*180/Math.PI);
+});
+const stopDrag=()=>{drag=null};
+plan.addEventListener("pointerup",stopDrag);plan.addEventListener("pointercancel",stopDrag);
+plan.addEventListener("keydown",e=>{
+  const g=e.target.closest("[data-l]");if(!g)return;
+  const d=(e.key==="ArrowRight"||e.key==="ArrowUp")?5:(e.key==="ArrowLeft"||e.key==="ArrowDown")?-5:0;
+  if(d){e.preventDefault();setAz(g.dataset.l,st[g.dataset.l].az+d)}
+});
+
+/* ---------- render ---------- */
+const view=$("view3d");
+const mainGL=makeGL(view);
+if(!mainGL){$("vf").innerHTML='<div class="nogl">Browser ini tidak mendukung WebGL, jadi foto 3D tidak bisa ditampilkan. Coba buka di Chrome atau Safari terbaru.</div>'}
+let raf=0;
+function schedule(){if(raf||!mainGL)return;raf=requestAnimationFrame(()=>{raf=0;mainGL.draw(params(st))})}
+
+const gallery=$("gallery");
+const thumbCanvas=document.createElement("canvas");thumbCanvas.width=150;thumbCanvas.height=200;
+const thumbGL=mainGL?makeGL(thumbCanvas):null;
+const thumbCtx=[];
+PRESETS.forEach(p=>{
+  const b=document.createElement("button");b.type="button";b.className="pick";b.id="pk_"+p.id;
+  b.innerHTML='<canvas width="150" height="200"></canvas><b>'+p.name+'</b><span>'+p.desc+'</span>';
+  b.onclick=()=>{applyPreset(p);update();
+    const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+    view.scrollIntoView({behavior:reduce?"auto":"smooth",block:"center"})};
+  gallery.appendChild(b);thumbCtx.push(b.querySelector("canvas").getContext("2d"));
+});
+let tRaf=0;
+function thumbsDirty(){
+  if(tRaf||!thumbGL)return;
+  tRaf=requestAnimationFrame(()=>{tRaf=0;
+    PRESETS.forEach((p,i)=>{
+      thumbGL.draw(params({key:p.key,fill:p.fill,back:p.back,bg:st.bg,exp:st.exp}));
+      thumbCtx[i].drawImage(thumbCanvas,0,0);
+    });
+  });
+}
+
+function update(){
+  LIGHTS.forEach(L=>{
+    const s=st[L.id];
+    $("on_"+L.id).checked=s.on;
+    $("c_"+L.id).classList.toggle("off",!s.on);
+    $("p_"+L.id).value=Math.round(s.p*100);$("vp_"+L.id).textContent=Math.round(s.p*100)+"%";
+    $("e_"+L.id).value=s.el+20;$("ve_"+L.id).textContent=elWord(s.el)+" · "+s.el+"°";
+    $("va_"+L.id).textContent=azText(s.az);
+    const a=s.az*Math.PI/180,x=CX+L.ring*Math.sin(a),y=CY+L.ring*Math.cos(a);
+    const g=$("g_"+L.id);g.setAttribute("transform","translate("+x.toFixed(1)+" "+y.toFixed(1)+")");
+    g.setAttribute("opacity",s.on?1:.35);g.setAttribute("aria-valuenow",s.az);
+    const ln=$("ln_"+L.id);ln.setAttribute("x2",x.toFixed(1));ln.setAttribute("y2",y.toFixed(1));ln.setAttribute("opacity",s.on?.55:.15);
+  });
+  syncSoft();syncCol();syncBg();
+  $("exp").value=st.exp;$("vexp").textContent=(st.exp>0?"+":st.exp<0?"−":"")+Math.abs(st.exp)+" EV";
+  PRESETS.forEach(p=>$("pk_"+p.id).setAttribute("aria-pressed",st.preset===p.id));
+  const c=classify();
+  $("pat").textContent=(st.preset?"":"Pola terdekat: ")+TIPS[c][0];
+  $("ratio").textContent=ratioText();
+  $("tip").textContent=TIPS[c][1];
+  schedule();
+}
+applyPreset(PRESETS[0]);
+update();
+thumbsDirty();
+
+}
+</script>
+<script>
+(function(){
+ const TABS=['dasar','lensa','lanjut'],map={dasar:'tab-exp',lensa:'tab-lens',lanjut:'tab-light'};const ready={};const inits={lensa:()=>initLens(),lanjut:()=>initLight()};
+ const name=()=>{const h=location.hash.slice(1);return TABS.includes(h)?h:'dasar'};
+ function show(n,scroll){
+  TABS.forEach(t=>{const on=t===n;document.getElementById(map[t]).hidden=!on;const b=document.getElementById('t_'+t);b.setAttribute('aria-selected',on?'true':'false');b.tabIndex=on?0:-1});
+  if(inits[n]&&!ready[n]){ready[n]=true;try{inits[n]()}catch(e){console.error(e)}}
+  if(scroll)window.scrollTo(0,0);
+ }
+ function go(n){if(location.hash.slice(1)!==n)location.hash=n;else show(n,true)}
+ document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.tab)));
+ document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
+ document.querySelector('.tabs').addEventListener('keydown',e=>{
+  if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;
+  const n=TABS[(TABS.indexOf(name())+(e.key==='ArrowRight'?1:-1)+3)%3];go(n);document.getElementById('t_'+n).focus();
+ });
+ addEventListener('hashchange',()=>show(name(),true));
+ show(name(),false);
+})();
+</script>
+<script>
+(function(){
+  const bar=document.getElementById('installBar'),txt=document.getElementById('installText'),btn=document.getElementById('installBtn');
+  const KEY='labfoto-install-hidden';
+  const hidden=()=>{try{return localStorage.getItem(KEY)==='1'}catch(e){return false}};
+  const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+  let deferred=null;
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;if(!standalone&&!hidden())bar.hidden=false});
+  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  if(ios&&!standalone&&!hidden()){txt.textContent='Untuk memasang di iPhone: ketuk tombol Bagikan di Safari, lalu pilih "Tambah ke Layar Utama".';btn.hidden=true;bar.hidden=false}
+  btn.addEventListener('click',async()=>{if(!deferred)return;deferred.prompt();await deferred.userChoice.catch(()=>{});deferred=null;bar.hidden=true});
+  document.getElementById('installClose').addEventListener('click',()=>{bar.hidden=true;try{localStorage.setItem(KEY,'1')}catch(e){}});
+  window.addEventListener('appinstalled',()=>{bar.hidden=true});
+  if('serviceWorker' in navigator&&location.protocol!=='file:'){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+})();
+</script>
+</body>
+</html>
