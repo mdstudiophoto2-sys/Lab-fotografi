@@ -279,6 +279,11 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 section[hidden]{display:none}
 #tab-exp .vf,#tab-lens .vf,#tab-light .vf{top:calc(var(--tabh) + 12px + env(safe-area-inset-top,0px))}
+.wrap.simple .more,.wrap.simple .adv{display:none!important}
+.wrap:not(.simple) .onlysimple{display:none!important}
+.modebtn{align-self:start;font:inherit;font-weight:600;font-size:14px;padding:10px 14px;border-radius:10px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.modebtn:hover{background:var(--ink);color:var(--bg)}
+.modebtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .jumpbox{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;border-top:1px solid var(--line);padding-top:18px}
 .jumpbox p{margin:0;color:var(--muted);font-size:14px;flex:1 1 240px}
 .jump{font:inherit;font-weight:600;font-size:14px;padding:9px 14px;border-radius:8px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);cursor:pointer}
@@ -424,10 +429,11 @@ section[hidden]{display:none}
   <header>
     <div class="eyebrow">Kelas Fotografi Menengah</div>
     <h1>Lensa dan <em>jarak</em> mengubah bentuk foto</h1>
-    <p class="lead">Panjang fokus mengatur seberapa luas yang tertangkap. Jarak kamera ke subjek mengatur perspektif, yaitu bentuk wajah dan seberapa rapat latar terlihat. Geser lensanya dan bandingkan.</p>
+    <p class="lead">Lensa pendek menangkap area luas, lensa panjang menangkap area sempit. Geser lensanya dan lihat bentuk wajah dan latar ikut berubah.</p>
+    <ol class="steps onlysimple"><li>Geser panjang fokus</li><li>Lihat wajah dan latar berubah</li><li>Baca penjelasan di bawah foto</li></ol>
   </header>
 
-  <section style="display:flex;flex-direction:column;gap:12px">
+  <section class="more" style="display:flex;flex-direction:column;gap:12px">
     <h2>Satu subjek, enam panjang fokus</h2>
     <p class="note">Subjek dibuat sama besar di semua gambar, jadi kameranya maju atau mundur. Contoh ini memakai kamera full frame. Ketuk gambar untuk mencobanya di bawah.</p>
     <div class="gallery" id="lnGallery"></div>
@@ -445,7 +451,7 @@ section[hidden]{display:none}
     </div>
     <div class="col">
       <div class="panel">
-        <div class="dial">
+        <div class="dial adv">
           <div class="lb">Lensa yang dipasang</div>
           <div class="chips" id="lnLens" style="margin-top:6px"></div>
           <p class="note" id="lnLensNote"></p>
@@ -455,18 +461,18 @@ section[hidden]{display:none}
           <input type="range" id="lnFocal" min="0" max="1000" step="1">
           <div class="ticks"><span id="lnMin"></span><span id="lnMax"></span></div>
         </div>
-        <div class="dial">
+        <div class="dial adv">
           <div class="lb">Sensor kamera</div>
           <div class="chips" id="lnSensor" style="margin-top:6px"></div>
           <p class="note" id="lnSensorNote"></p>
         </div>
-        <div class="dial">
+        <div class="dial adv">
           <div class="lb">Cara mengambil foto</div>
           <div class="chips" id="lnMode" style="margin-top:6px"></div>
           <p class="note" id="lnModeNote"></p>
         </div>
       </div>
-      <div class="panel">
+      <div class="panel adv">
         <div>
           <h3>Denah dari atas</h3>
           <p class="note">Segitiga oranye adalah area yang tertangkap kamera. Kotak abu-abu adalah gedung di latar, dengan lampu jalan di antaranya.</p>
@@ -475,6 +481,8 @@ section[hidden]{display:none}
       </div>
     </div>
   </section>
+
+  <button type="button" class="modebtn" id="lnToggle" aria-expanded="false"></button>
 <div class="jumpbox"><p>Sudah paham lensa? Lanjut mengatur cahaya studio dengan tiga lampu.</p><button type="button" class="jump" data-go="lanjut">Lanjut ke Cahaya Studio 3D</button></div></div>
 </section>
 <section id="tab-light" role="tabpanel" aria-labelledby="t_lanjut" hidden>
@@ -482,15 +490,20 @@ section[hidden]{display:none}
   <header>
     <div class="eyebrow">Kelas Fotografi Tingkat Lanjut</div>
     <h1>Mengatur <em>cahaya</em> di studio 3D</h1>
-    <p class="lead">Satu subjek, tiga lampu. Kamu hanya menentukan dari mana cahaya datang, setinggi apa, dan sekuat apa. Bayangan dan bentuk wajah berubah langsung di foto.</p>
-    <ol class="steps">
+    <p class="lead">Kamu hanya menentukan dari mana cahaya datang, setinggi apa, dan sekuat apa. Bayangan di wajah langsung berubah di foto.</p>
+    <ol class="steps onlysimple">
+      <li>Geser titik K di denah</li>
+      <li>Atur tinggi dan terang</li>
+      <li>Lihat bayangan di wajah</li>
+    </ol>
+    <ol class="steps adv">
       <li>Pilih pola cahaya</li>
       <li>Geser titik lampu di denah</li>
       <li>Atur terang dan tinggi</li>
     </ol>
   </header>
 
-  <section style="display:flex;flex-direction:column;gap:12px">
+  <section class="more" style="display:flex;flex-direction:column;gap:12px">
     <h2>Mulai dari pola klasik</h2>
     <div class="gallery" id="gallery"></div>
   </section>
@@ -500,7 +513,7 @@ section[hidden]{display:none}
       <canvas id="view3d" width="420" height="560" aria-label="Foto potret 3D dengan lampu studio"></canvas>
       <div class="hud">
         <div class="pat" id="pat"></div>
-        <div class="ratio" id="ratio"></div>
+        <div class="ratio adv" id="ratio"></div>
         <div class="tip" id="tip"></div>
       </div>
     </div>
@@ -514,7 +527,7 @@ section[hidden]{display:none}
         <svg class="plan" id="plan" viewBox="0 0 300 330" role="group" aria-label="Denah studio"></svg>
       </div>
       <div id="lcards" style="display:flex;flex-direction:column;gap:14px"></div>
-      <div class="panel">
+      <div class="panel adv">
         <div class="dial">
           <div class="lb">Latar</div>
           <div class="chips" id="bgchips" style="margin-top:6px"></div>
@@ -527,6 +540,8 @@ section[hidden]{display:none}
       </div>
     </div>
   </section>
+
+  <button type="button" class="modebtn" id="lgToggle" aria-expanded="false"></button>
 <div class="jumpbox"><p>Butuh dasar dulu? Segitiga exposure menjelaskan terang, gelap, blur, dan noise.</p><button type="button" class="jump" data-go="dasar">Kembali ke Segitiga Exposure</button></div></div>
 </section>
 <script>
@@ -1082,7 +1097,16 @@ function update(){
   drawPlan(fe,D);
   if(gl&&!raf)raf=requestAnimationFrame(()=>{raf=0;gl.draw(D,fe)});
 }
-update();
+const lnWrap=$("lnToggle").closest(".wrap"),lnTg=$("lnToggle");
+function lnSimple(on){
+  lnWrap.classList.toggle("simple",on);
+  if(on){st.lens=0;st.crop=0;st.mode=0}
+  lnTg.textContent=on?"Lihat penjelasan lengkap: jenis lensa, sensor, denah, galeri":"Kembali ke tampilan sederhana";
+  lnTg.setAttribute("aria-expanded",String(!on));
+  update();
+}
+lnTg.onclick=()=>lnSimple(!lnWrap.classList.contains("simple"));
+lnSimple(true);
 
 }
 </script>
@@ -1297,13 +1321,13 @@ const azText=a=>{const r=Math.round(a);return r===0?"0° depan":Math.abs(r)+"° 
 /* ---------- UI: kartu lampu ---------- */
 const cards=$("lcards");
 LIGHTS.forEach(L=>{
-  const el=document.createElement("div");el.className="lcard";el.id="c_"+L.id;
+  const el=document.createElement("div");el.className="lcard"+(L.id==="key"?"":" adv");el.id="c_"+L.id;
   let extra="";
-  if(L.id==="key")extra='<div class="dial"><div class="lb">Kualitas cahaya</div><div class="chips" id="softchips" style="margin-top:6px"></div></div>';
+  if(L.id==="key")extra='<div class="dial adv"><div class="lb">Kualitas cahaya</div><div class="chips" id="softchips" style="margin-top:6px"></div></div>';
   if(L.id==="back")extra='<div class="dial"><div class="lb">Warna cahaya</div><div class="chips" id="colchips" style="margin-top:6px"></div></div>';
   el.innerHTML=
    '<div class="lhead"><span class="dot" style="background:'+L.css+'"></span><div><h3>'+L.name+'</h3><p class="note">'+L.role+'</p></div>'+
-   '<label class="sw"><input type="checkbox" id="on_'+L.id+'"><span>Nyala</span></label></div>'+
+   '<label class="sw adv"><input type="checkbox" id="on_'+L.id+'"><span>Nyala</span></label></div>'+
    '<div class="dial"><div class="row"><span class="lb">Sudut</span><span class="val" id="va_'+L.id+'"></span></div><p class="note">Geser titiknya di denah</p></div>'+
    '<div class="dial"><div class="row"><label for="e_'+L.id+'">Tinggi</label><span class="val" id="ve_'+L.id+'"></span></div><input type="range" id="e_'+L.id+'" min="0" max="100"></div>'+
    '<div class="dial"><div class="row"><label for="p_'+L.id+'">Terang</label><span class="val" id="vp_'+L.id+'"></span></div><input type="range" id="p_'+L.id+'" min="0" max="100"></div>'+extra;
@@ -1328,13 +1352,13 @@ $("exp").addEventListener("input",e=>{st.exp=+e.target.value;thumbsDirty();updat
 const plan=$("plan"),CX=150,CY=150;
 let ph='<rect x="1" y="1" width="298" height="328" rx="12" fill="none" stroke="var(--line)"/>'+
  '<line x1="50" y1="24" x2="250" y2="24" stroke="var(--muted)" stroke-width="5" stroke-linecap="round"/><text x="150" y="42" text-anchor="middle">LATAR</text>';
-LIGHTS.forEach(L=>{ph+='<circle class="ring" cx="150" cy="150" r="'+L.ring+'"/>'});
-LIGHTS.forEach(L=>{ph+='<line id="ln_'+L.id+'" x1="150" y1="150" x2="150" y2="150" stroke="'+L.css+'" stroke-width="2" opacity=".55"/>'});
+LIGHTS.forEach(L=>{ph+='<circle class="ring'+(L.id==="key"?"":" adv")+'" cx="150" cy="150" r="'+L.ring+'"/>'});
+LIGHTS.forEach(L=>{ph+='<line'+(L.id==="key"?"":' class="adv"')+' id="ln_'+L.id+'" x1="150" y1="150" x2="150" y2="150" stroke="'+L.css+'" stroke-width="2" opacity=".55"/>'});
 ph+='<circle cx="150" cy="150" r="20" fill="var(--muted)" opacity=".55"/><polygon points="150,178 143,168 157,168" fill="var(--muted)" opacity=".55"/>'+
  '<text x="150" y="154" text-anchor="middle" style="fill:var(--surface)">SUBJEK</text>';
 ph+='<g transform="translate(150 306)"><rect x="-16" y="-10" width="32" height="20" rx="4" fill="var(--ink)"/><circle cx="0" cy="0" r="6" fill="var(--bg)"/><rect x="-6" y="-14" width="12" height="5" rx="2" fill="var(--ink)"/></g><text x="150" y="326" text-anchor="middle">KAMERA</text>';
 LIGHTS.forEach(L=>{
-  ph+='<g data-l="'+L.id+'" id="g_'+L.id+'" tabindex="0" role="slider" aria-label="Sudut '+L.name+'" aria-valuemin="-180" aria-valuemax="180">'+
+  ph+='<g'+(L.id==="key"?"":' class="adv"')+' data-l="'+L.id+'" id="g_'+L.id+'" tabindex="0" role="slider" aria-label="Sudut '+L.name+'" aria-valuemin="-180" aria-valuemax="180">'+
    '<circle r="22" fill="transparent"/><circle r="14" fill="'+L.css+'"/><text class="dotl" y="4">'+L.letter+'</text></g>';
 });
 plan.innerHTML=ph;
@@ -1412,7 +1436,16 @@ function update(){
   schedule();
 }
 applyPreset(PRESETS[0]);
-update();
+const lgWrap=$("lgToggle").closest(".wrap"),lgTg=$("lgToggle");
+function lgSimple(on){
+  lgWrap.classList.toggle("simple",on);
+  st.key.on=true;st.fill.on=!on;st.back.on=!on;st.preset=null;
+  lgTg.textContent=on?"Lihat penjelasan lengkap: tiga lampu, pola klasik, latar":"Kembali ke satu lampu";
+  lgTg.setAttribute("aria-expanded",String(!on));
+  update();
+}
+lgTg.onclick=()=>lgSimple(!lgWrap.classList.contains("simple"));
+lgSimple(true);
 thumbsDirty();
 
 }
