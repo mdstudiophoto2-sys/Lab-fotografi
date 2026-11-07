@@ -189,6 +189,12 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15p
 #tab-exp .frame.cur{border-color:var(--accent)}
 #tab-exp .frame canvas{width:100%;height:auto;display:block;border-radius:4px;aspect-ratio:3/2}
 #tab-exp .frame span{display:block;font-family:var(--mono);font-size:11px;padding-top:4px}
+#tab-exp .wrap.simple .fx,#tab-exp .wrap.simple .more,#tab-exp .wrap.simple .adv{display:none!important}
+#tab-exp .wrap:not(.simple) .onlysimple{display:none!important}
+#tab-exp .modebtn{align-self:start;font:inherit;font-weight:600;font-size:14px;padding:10px 14px;border-radius:10px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+#tab-exp .modebtn:hover{background:var(--ink);color:var(--bg)}
+#tab-exp .steps{margin:10px 0 0;padding-left:20px;max-width:62ch}
+#tab-exp .steps li{margin:2px 0}
 
 @media (prefers-color-scheme:dark){}
 #tab-lens .wrap{max-width:1040px;margin:0 auto;padding-block:20px 48px;
@@ -312,7 +318,8 @@ section[hidden]{display:none}
   <header>
     <div class="eyebrow">Kelas Fotografi Dasar</div>
     <h1>Kamera ini cuma bisa <em>menerangkan</em> dan <em>menggelapkan</em></h1>
-    <p class="lead">Geser tiga pengaturan segitiga exposure dan lihat fotonya jadi lebih terang atau lebih gelap. Tiap pengaturan juga membawa satu efek samping: blur latar, gerakan kabur, atau bintik noise.</p>
+    <p class="lead">Geser tiga pengaturan di bawah, lalu lihat fotonya jadi lebih terang atau lebih gelap.</p>
+    <ol class="steps onlysimple"><li>Pilih kondisi cahaya.</li><li>Geser satu slider.</li><li>Baca hasilnya di kotak bawah slider. Tujuannya: foto yang <b>pas</b>.</li></ol>
   </header>
 
   <section class="top">
@@ -325,7 +332,7 @@ section[hidden]{display:none}
     </div>
 
     <div class="panel">
-      <div>
+      <div class="adv">
         <div class="eyebrow" style="margin-bottom:6px">Mode kamera</div>
         <div class="chips" id="modes"></div>
         <div class="dial" id="compBox" style="margin-top:12px" hidden>
@@ -334,7 +341,7 @@ section[hidden]{display:none}
           <div class="hint">Minta kamera sengaja lebih terang (+) atau lebih gelap (−)</div>
         </div>
       </div>
-      <hr class="sep">
+      <hr class="sep adv">
       <div>
         <div class="eyebrow" style="margin-bottom:6px">Kondisi cahaya</div>
         <div class="chips" id="scene"></div>
@@ -361,7 +368,9 @@ section[hidden]{display:none}
     </div>
   </section>
 
-  <section class="mid">
+  <button type="button" class="modebtn" id="modeToggle" aria-expanded="false"></button>
+
+  <section class="mid more">
     <div class="tri">
       <svg viewBox="0 0 300 282" role="img" aria-label="Segitiga exposure">
         <polygon points="150,34 270,230 30,230" fill="none" stroke="var(--line)" stroke-width="3"/>
@@ -391,19 +400,19 @@ section[hidden]{display:none}
     </div>
   </section>
 
-  <section style="display:flex;flex-direction:column;gap:12px">
+  <section class="more" style="display:flex;flex-direction:column;gap:12px">
     <h2>Efek samping tiap sudut</h2>
     <p class="note">Dua foto di tiap kartu dibuat sama terang, jadi yang berbeda hanya efeknya.</p>
     <div class="cards" id="cards"></div>
   </section>
 
-  <section style="display:flex;flex-direction:column;gap:12px">
+  <section class="more" style="display:flex;flex-direction:column;gap:12px">
     <h2>Pilih tujuan, bukan angka</h2>
     <p class="note">Tiga pengaturan terlalu banyak dipikirkan sekaligus. Atur satu yang paling menentukan hasil foto, lalu biarkan kamera menghitung sisanya. Tiap kartu menyetel lab di atas ke mode yang sesuai.</p>
     <div class="goals" id="goals"></div>
   </section>
 
-  <section style="display:flex;flex-direction:column;gap:10px">
+  <section class="more" style="display:flex;flex-direction:column;gap:10px">
     <h2>Kolase bracketing</h2>
     <p class="note">Pengaturan kamu sekarang ada di tengah, diapit −2 sampai +2 stop. Ketuk satu bingkai untuk memakai terang itu. Di mode manual yang berubah ISO, di mode otomatis yang berubah kompensasi exposure.</p>
     <div class="collage" id="collage"></div>
@@ -534,7 +543,7 @@ const NOISE=[0,0.004,0.009,0.016,0.028,0.045,0.07,0.1];
 const APFX=[[4,"Latar sangat blur, area tajam tipis"],[4,"Latar sangat blur"],[3,"Latar blur"],[2,"Latar agak blur"],[1,"Latar sedikit blur"],[1,"Hampir semua tajam"],[0,"Semua tajam"],[0,"Semua tajam, cocok lanskap"],[0,"Semua tajam"]];
 const SHFX=[[0,"Gerakan beku total"],[0,"Gerakan beku total"],[0,"Gerakan beku total"],[0,"Gerakan beku total"],[0,"Gerakan beku"],[0,"Gerakan beku"],[1,"Sedikit kabur"],[2,"Kabur, tangan mulai goyang"],[3,"Kabur, pakai tripod"],[4,"Kabur panjang, wajib tripod"],[4,"Kabur panjang, wajib tripod"],[4,"Kabur panjang, wajib tripod"],[4,"Kabur panjang, wajib tripod"]];
 const ISOFX=[[0,"Bersih"],[0,"Bersih"],[1,"Hampir bersih"],[1,"Noise halus"],[2,"Noise terlihat"],[3,"Noise jelas"],[4,"Noise kasar"],[4,"Noise sangat kasar"]];
-const st={ap:7,sh:5,iso:0,scene:0,mode:"m",comp:0};
+const st={ap:7,sh:5,iso:0,scene:3,mode:"m",comp:0};
 const $=id=>document.getElementById(id);
 const W=600,H=400;
 
@@ -670,13 +679,13 @@ const sc=()=>SCENES[st.scene][1];
 const totalOf=()=>(st.sh-BASE.sh)-(st.ap-BASE.ap)+(st.iso-BASE.iso)-sc();
 const fmt=n=>n===0?"0":(n>0?"+":"−")+Math.abs(n);
 function verdictFor(s){
-  if(s<=-4)return["Hampir hitam","Kurang cahaya parah. Buka bukaan, perlambat shutter, atau naikkan ISO."];
-  if(s<=-2)return["Terlalu gelap","Kurang "+(-s)+" stop."];
-  if(s===-1)return["Agak gelap","Kurang 1 stop."];
+  if(s<=-4)return["Hampir hitam","Cahaya jauh kurang. Buat lebih terang: bukaan angka kecil, shutter lebih lambat, atau ISO lebih besar."];
+  if(s<=-2)return["Terlalu gelap","Kurang "+(-s)+" stop. Geser salah satu slider ke arah lebih terang."];
+  if(s===-1)return["Agak gelap","Kurang 1 stop. Tambah sedikit cahaya."];
   if(s===0)return["Pas","Exposure seimbang untuk cahaya ini."];
-  if(s===1)return["Agak terang","Lebih 1 stop."];
-  if(s<4)return["Terlalu terang","Kelebihan "+s+" stop, langit mulai putih."];
-  return["Hampir putih","Sempitkan bukaan, percepat shutter, atau turunkan ISO."];
+  if(s===1)return["Agak terang","Lebih 1 stop. Kurangi sedikit cahaya."];
+  if(s<4)return["Terlalu terang","Kelebihan "+s+" stop, langit mulai putih. Geser salah satu slider ke arah lebih gelap."];
+  return["Hampir putih","Buat lebih gelap: bukaan angka besar, shutter lebih cepat, atau ISO lebih kecil."];
 }
 const MODES=[["m","M · Manual",null],["autoiso","Auto ISO","iso"],["av","A · Prioritas bukaan","sh"],["tv","S · Prioritas shutter","ap"]];
 function autoSolve(){
@@ -785,7 +794,16 @@ GOALS.forEach(gl=>{
     $("view").scrollIntoView({behavior:reduce?"auto":"smooth",block:"center"})};
   el.appendChild(b);goalsBox.appendChild(el);
 });
-update();
+const wrapEl=document.querySelector(".wrap"),tg=$("modeToggle");
+function setSimple(on){
+  wrapEl.classList.toggle("simple",on);
+  if(on){st.mode="m";st.comp=0}
+  tg.textContent=on?"Lihat penjelasan lengkap: segitiga, efek samping, mode otomatis":"Kembali ke tampilan sederhana";
+  tg.setAttribute("aria-expanded",String(!on));
+  update();
+}
+tg.onclick=()=>setSimple(!wrapEl.classList.contains("simple"));
+setSimple(true);
 
 })();
 </script>
