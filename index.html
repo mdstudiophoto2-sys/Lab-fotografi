@@ -308,16 +308,42 @@ section[hidden]{display:none}
 <style>
 .who{box-sizing:border-box;position:fixed;inset:0;z-index:50;background:var(--bg);display:grid;place-items:center;padding:24px max(16px,env(safe-area-inset-left,0px)) 24px max(16px,env(safe-area-inset-right,0px));overflow:auto}
 .whocard{box-sizing:border-box;width:100%;max-width:380px;display:flex;flex-direction:column;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px}
-.whoeye{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.whocard h2{font-family:var(--display);font-weight:800;font-size:26px;line-height:1.15;margin:0 0 6px;color:var(--ink)}
-.whocard label{font-weight:600;font-size:14px;color:var(--ink);margin-top:4px}
-.whocard input{font:inherit;font-size:16px;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
-.whocard input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
-.whocard button{margin-top:8px;font:inherit;font-weight:600;font-size:15px;padding:12px;border-radius:10px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);cursor:pointer}
+.whomd{display:flex;flex-direction:column;line-height:1;margin-bottom:6px}
+.whomd .dari{font-size:13px;color:var(--muted);margin-bottom:4px}
+.whomd b{font-family:var(--display);font-weight:800;font-size:clamp(30px,9vw,40px);letter-spacing:.02em;color:var(--ink);white-space:nowrap}
+.whocard .whoapp{margin:0;font-family:var(--display);font-weight:800;font-size:26px;line-height:1.1;color:var(--ink)}
+.whoeye{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.whocard .lbl{font-weight:600;font-size:14px;color:var(--ink);margin-top:4px}
+.whocard .opsi{font-weight:400;color:var(--muted);font-size:12.5px}
+.whocard .sub{display:flex;flex-direction:column;gap:8px}
+.whocard input{box-sizing:border-box;width:100%;font:inherit;font-size:16px;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.whocard input:focus-visible,.whocard button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.peran{display:flex;flex-wrap:wrap;gap:8px}
+.peran button{font:inherit;font-size:14px;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.peran button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.whocard button[type="submit"]{margin-top:8px;font:inherit;font-weight:600;font-size:15px;padding:12px;border-radius:10px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);cursor:pointer}
 .whonote{margin:4px 0 0;font-size:12.5px;color:var(--muted)}
 .whoerr{margin:2px 0 0;font-size:13px;color:var(--accent);font-weight:600}
 .whoami{max-width:1000px;margin:0 auto;padding:8px max(16px,env(safe-area-inset-left,0px)) 20px;font-size:12.5px;color:var(--muted)}
 .whoami button{font:inherit;font-size:12.5px;background:none;border:0;padding:0;color:var(--ink);text-decoration:underline;cursor:pointer}
+</style>
+<style>
+.dukung{max-width:1000px;margin:8px auto 0;padding:18px max(16px,env(safe-area-inset-left,0px)) 6px max(16px,env(safe-area-inset-right,0px));display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;border-top:1px solid var(--line)}
+.dukung p{margin:0;flex:1 1 240px;font-size:14px;color:var(--muted)}
+.dukung button,.tentang button.pri{font:inherit;font-weight:600;font-size:14px;padding:9px 14px;border-radius:8px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.dukung button:hover{background:var(--ink);color:var(--bg)}
+.tentang{box-sizing:border-box;position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.45);display:grid;place-items:center;padding:20px max(16px,env(safe-area-inset-left,0px)) 20px max(16px,env(safe-area-inset-right,0px));overflow:auto}
+.tcard{box-sizing:border-box;width:100%;max-width:400px;display:flex;flex-direction:column;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;color:var(--ink)}
+.tcard .eye{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.tcard h2{font-family:var(--display);font-weight:800;font-size:24px;line-height:1.15;margin:0}
+.tcard p{margin:0;font-size:14px;line-height:1.55}
+.tcard .mut{color:var(--muted);font-size:13px}
+.tcard .qr{flex:none;align-self:center;width:200px;max-width:100%;aspect-ratio:800/1305;border-radius:12px;border:1px solid var(--line);background:#fff;display:block;overflow:hidden}
+.tcard .qr img{width:100%;height:100%;object-fit:contain;display:block}
+.tcard .qr.ph{background:transparent;border-style:dashed;color:var(--muted);font-size:13px;text-align:center;padding:12px}
+.tcard a.pri,.tcard button.pri{display:block;text-align:center;text-decoration:none;font:inherit;font-weight:600;font-size:15px;padding:12px;border-radius:10px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);cursor:pointer}
+.tcard button.sec{font:inherit;font-size:14px;padding:10px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.tcard :focus-visible,.dukung button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -1484,18 +1510,48 @@ thumbsDirty();
  show(name(),false);
 })();
 </script>
+
+<div class="dukung" id="dukung">
+  <p>Aplikasi ini gratis. Kalau bermanfaat, kamu bisa mendukung pembuatnya.</p>
+  <button type="button" id="dukungBtn" aria-haspopup="dialog">Tentang &amp; dukung pembuat</button>
+</div>
+<div class="tentang" id="tentang" role="dialog" aria-modal="true" aria-labelledby="tT" hidden>
+  <div class="tcard">
+    <div class="eye">Tentang aplikasi</div>
+    <h2 id="tT">Lab Fotografi</h2>
+    <p>Dibuat oleh <b>MD Studio</b>, Padang, supaya belajar dasar fotografi lebih mudah dan gratis untuk semua murid.</p>
+    <p class="mut">Mendukung itu sukarela. Berapa pun nilainya sangat berarti untuk pengembangan materi berikutnya.</p>
+    <div class="qr"><img src="qris.png" alt="Kode QRIS untuk mendukung pembuat"></div>
+    
+    <button type="button" class="sec" id="tutupT">Tutup</button>
+  </div>
+</div>
 <p class="whoami" id="whoami" hidden></p>
 
 <div id="who" class="who" role="dialog" aria-modal="true" aria-labelledby="whoT" hidden>
   <form id="whoForm" class="whocard" novalidate>
-    <div class="whoeye">Lab Fotografi</div>
-    <h2 id="whoT">Kenalan dulu</h2>
-    <label for="whoNama">Nama</label>
-    <input id="whoNama" name="nama" autocomplete="name" maxlength="60" required placeholder="Contoh: Rina Putri">
-    <label for="whoKelas">Kelas</label>
-    <input id="whoKelas" name="kelas" maxlength="20" required placeholder="Contoh: XI DKV 1">
-    <p class="whoerr" id="whoErr" hidden>Isi nama dan kelas dulu.</p>
-    <p class="whonote">Nama, kelas, waktu buka, dan materi yang kamu pakai dicatat untuk guru. Tidak ada data lain yang diambil.</p>
+    <div class="whomd"><span class="dari">Aplikasi dari</span><b>MD STUDIO</b></div>
+    <h2 id="whoT" class="whoapp">Lab Fotografi</h2>
+    <div class="whoeye">Kenalan dulu</div>
+    <span class="lbl" id="whoPeranLbl">Kamu sebagai</span>
+    <div class="peran" role="group" aria-labelledby="whoPeranLbl">
+      <button type="button" data-p="murid" aria-pressed="false">Murid</button>
+      <button type="button" data-p="guru" aria-pressed="false">Guru</button>
+      <button type="button" data-p="mahasiswa" aria-pressed="false">Mahasiswa</button>
+      <button type="button" data-p="umum" aria-pressed="false">Umum</button>
+    </div>
+    <label class="lbl" for="whoNama">Nama</label>
+    <input id="whoNama" name="nama" autocomplete="name" maxlength="60" placeholder="Contoh: Rina Putri">
+    <div class="sub" id="whoKelasWrap" hidden>
+      <label class="lbl" for="whoKelas">Kelas</label>
+      <input id="whoKelas" name="kelas" maxlength="20" placeholder="Contoh: XI DKV 1">
+    </div>
+    <div class="sub" id="whoAsalWrap" hidden>
+      <label class="lbl" for="whoAsal">Asal sekolah/kampus <span class="opsi">(boleh dikosongkan)</span></label>
+      <input id="whoAsal" name="asal" maxlength="80" placeholder="Contoh: SMK N 1 Padang">
+    </div>
+    <p class="whoerr" id="whoErr" hidden></p>
+    <p class="whonote">Nama, peran, kelas, dan asal sekolah dicatat untuk guru. Tidak ada data lain yang diambil.</p>
     <button type="submit">Mulai belajar</button>
   </form>
 </div>
@@ -1520,13 +1576,25 @@ thumbsDirty();
   var ON=/(^|\.)github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname);
   if(!ON)return;
   var URL_RPC="https://tvqxfcvrcoqipdycjhlv.supabase.co/rest/v1/rpc/lab_catat",KEY="sb_publishable_f0-LxFQvYqMH3JHHvQ8BSA_llc137cU";
+  var PERAN=['murid','guru','mahasiswa','umum'];
   var LS={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
   var dev=LS.get('labfoto-dev');
   if(!dev){dev=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():('d'+Date.now().toString(36)+Math.random().toString(36).slice(2,10));LS.set('labfoto-dev',dev)}
-  var me=null;try{me=JSON.parse(LS.get('labfoto-who')||'null')}catch(e){}
-  var gate=document.getElementById('who'),form=document.getElementById('whoForm'),inN=document.getElementById('whoNama'),inK=document.getElementById('whoKelas'),err=document.getElementById('whoErr'),foot=document.getElementById('whoami');
+  var prof=null;try{prof=JSON.parse(LS.get('labfoto-who')||'null')}catch(e){}
+  var me=(prof&&PERAN.indexOf(prof.peran)>=0)?prof:null;
+  var gate=document.getElementById('who'),form=document.getElementById('whoForm'),inN=document.getElementById('whoNama'),inK=document.getElementById('whoKelas'),inA=document.getElementById('whoAsal'),err=document.getElementById('whoErr'),foot=document.getElementById('whoami');
+  var kWrap=document.getElementById('whoKelasWrap'),aWrap=document.getElementById('whoAsalWrap'),btns=[].slice.call(form.querySelectorAll('.peran button'));
+  var peran=null;
   var TABS=['dasar','lensa','lanjut'];
   function tabNow(){var h=location.hash.slice(1);return TABS.indexOf(h)>=0?h:'dasar'}
+  function labelPeran(p){return{murid:'Murid',guru:'Guru',mahasiswa:'Mahasiswa',umum:'Umum'}[p]||''}
+  function setPeran(p){
+    peran=p;
+    btns.forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-p')===p))});
+    kWrap.hidden=(p!=='murid');
+    aWrap.hidden=(!p||p==='umum');
+  }
+  btns.forEach(function(b){b.addEventListener('click',function(){setPeran(b.getAttribute('data-p'));err.hidden=true})});
   function readQ(){try{return JSON.parse(LS.get('labfoto-q')||'[]')}catch(e){return[]}}
   function writeQ(q){LS.set('labfoto-q',JSON.stringify(q.slice(-100)))}
   function post(ev,keep){
@@ -1541,31 +1609,43 @@ thumbsDirty();
   }
   function log(peristiwa,extra,keep){
     if(!me)return;
-    var ev={p_perangkat:dev,p_nama:me.nama,p_kelas:me.kelas,p_peristiwa:peristiwa,p_tab:tabNow(),p_durasi:null,p_waktu:new Date().toISOString()};
+    var ev={p_perangkat:dev,p_nama:me.nama,p_kelas:me.kelas||null,p_peran:me.peran,p_asal:me.asal||null,p_peristiwa:peristiwa,p_tab:tabNow(),p_durasi:null,p_waktu:new Date().toISOString()};
     if(extra)for(var k in extra)ev[k]=extra[k];
     if(navigator.onLine===false){var q=readQ();q.push(ev);writeQ(q);return}
     post(ev,keep).then(flush).catch(function(){var q=readQ();q.push(ev);writeQ(q)});
   }
   var lastTab=null,shownAt=0,hiddenAt=0,started=false;
   function showFoot(){
-    foot.textContent='';foot.append('Masuk sebagai ');var b=document.createElement('b');b.textContent=me.nama+' ('+me.kelas+')';foot.append(b,' · ');
-    var c=document.createElement('button');c.type='button';c.textContent='Bukan kamu? Ganti nama';c.onclick=openGate;foot.append(c);foot.hidden=false;
+    foot.textContent='';foot.append('Masuk sebagai ');
+    var b=document.createElement('b');b.textContent=me.nama;foot.append(b);
+    var bits=[labelPeran(me.peran)];if(me.kelas)bits.push(me.kelas);if(me.asal)bits.push(me.asal);
+    foot.append(' ('+bits.join(' · ')+') · ');
+    var c=document.createElement('button');c.type='button';c.textContent='Bukan kamu? Ganti';c.onclick=openGate;foot.append(c);foot.hidden=false;
   }
   function start(){
     if(started)return;started=true;
     showFoot();lastTab=tabNow();shownAt=Date.now();log('buka');
   }
   function openGate(){
-    inN.value=me?me.nama:'';inK.value=me?me.kelas:'';err.hidden=true;gate.hidden=false;
-    setTimeout(function(){inN.focus()},50);
+    var s=prof||{};
+    inN.value=s.nama||'';inK.value=s.kelas||'';inA.value=s.asal||'';
+    err.hidden=true;setPeran(PERAN.indexOf(s.peran)>=0?s.peran:null);gate.hidden=false;
+    setTimeout(function(){(peran?inN:btns[0]).focus()},50);
   }
   form.addEventListener('submit',function(e){
     e.preventDefault();
-    var n=inN.value.replace(/\s+/g,' ').trim(),k=inK.value.replace(/\s+/g,' ').trim();
-    if(n.length<2||!k){err.hidden=false;(n.length<2?inN:inK).focus();return}
-    var changed=!me||me.nama!==n||me.kelas!==k;
+    var n=inN.value.replace(/\s+/g,' ').trim(),k=inK.value.replace(/\s+/g,' ').trim(),a=inA.value.replace(/\s+/g,' ').trim();
+    var msg='';
+    if(!peran)msg='Pilih dulu kamu sebagai apa.';
+    else if(n.length<2)msg='Tulis nama lengkapmu.';
+    else if(peran==='murid'&&!k)msg='Isi kelasmu dulu.';
+    if(msg){err.textContent=msg;err.hidden=false;(!peran?btns[0]:(n.length<2?inN:inK)).focus();return}
+    if(peran!=='murid')k='';
+    if(peran==='umum')a='';
+    var next={nama:n,kelas:k||null,peran:peran,asal:a||null};
+    var changed=!prof||prof.nama!==next.nama||(prof.kelas||null)!==next.kelas||prof.peran!==next.peran||(prof.asal||null)!==next.asal;
     if(me&&changed&&started){endSession(false)}
-    me={nama:n,kelas:k};LS.set('labfoto-who',JSON.stringify(me));gate.hidden=true;
+    me=next;prof=next;LS.set('labfoto-who',JSON.stringify(me));gate.hidden=true;
     if(!started)start();else{showFoot();if(changed){shownAt=Date.now();log('buka')}}
   });
   function endSession(keep){
@@ -1582,6 +1662,17 @@ thumbsDirty();
   addEventListener('online',flush);
   if(me)start();else openGate();
   flush();
+})();
+</script>
+<script>
+(function(){
+  var d=document.getElementById('tentang'),b=document.getElementById('dukungBtn'),x=document.getElementById('tutupT');
+  if(!d||!b)return;var last=null;
+  function open(){last=document.activeElement;d.hidden=false;x.focus()}
+  function close(){d.hidden=true;if(last&&last.focus)last.focus()}
+  b.addEventListener('click',open);x.addEventListener('click',close);
+  d.addEventListener('click',function(e){if(e.target===d)close()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!d.hidden)close()});
 })();
 </script>
 </body>
