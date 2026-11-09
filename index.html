@@ -3,7 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Belajar fotografi interaktif: segitiga exposure, lensa dan jarak, serta cahaya studio 3D.">
+<meta name="description" content="Belajar fotografi tanpa kamera: segitiga exposure, lensa dan jarak, serta cahaya studio 3D. Gratis, langsung di browser HP.">
+<link rel="canonical" href="https://mdstudiophoto2-sys.github.io/Lab-fotografi/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="id_ID">
+<meta property="og:site_name" content="MD Studio">
+<meta property="og:title" content="Lab Fotografi · Aplikasi dari MD Studio">
+<meta property="og:description" content="Belajar fotografi tanpa kamera: segitiga exposure, lensa dan jarak, serta cahaya studio 3D. Gratis, langsung di browser HP.">
+<meta property="og:url" content="https://mdstudiophoto2-sys.github.io/Lab-fotografi/">
+<meta property="og:image" content="https://mdstudiophoto2-sys.github.io/Lab-fotografi/cover.png">
+<meta property="og:image:secure_url" content="https://mdstudiophoto2-sys.github.io/Lab-fotografi/cover.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Lab Fotografi, aplikasi dari MD Studio untuk belajar fotografi tanpa kamera">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Lab Fotografi · Aplikasi dari MD Studio">
+<meta name="twitter:description" content="Belajar fotografi tanpa kamera: segitiga exposure, lensa dan jarak, serta cahaya studio 3D. Gratis, langsung di browser HP.">
+<meta name="twitter:image" content="https://mdstudiophoto2-sys.github.io/Lab-fotografi/cover.png">
 <meta name="theme-color" content="#eef0ec" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151815" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1521,7 +1538,7 @@ thumbsDirty();
     <h2 id="tT">Lab Fotografi</h2>
     <p>Dibuat oleh <b>MD Studio</b>, Padang, supaya belajar dasar fotografi lebih mudah dan gratis untuk semua murid.</p>
     <p class="mut">Mendukung itu sukarela. Berapa pun nilainya sangat berarti untuk pengembangan materi berikutnya.</p>
-    <div class="qr"><img src="qris.png" alt="Kode QRIS untuk mendukung pembuat"></div>
+    <div class="qr"><img data-src="qris.png" alt="Kode QRIS untuk mendukung pembuat" decoding="async"></div>
     
     <button type="button" class="sec" id="tutupT">Tutup</button>
   </div>
@@ -1668,7 +1685,7 @@ thumbsDirty();
 (function(){
   var d=document.getElementById('tentang'),b=document.getElementById('dukungBtn'),x=document.getElementById('tutupT');
   if(!d||!b)return;var last=null;
-  function open(){last=document.activeElement;d.hidden=false;x.focus()}
+  function open(){var q=d.querySelector('img[data-src]');if(q&&!q.getAttribute('src'))q.setAttribute('src',q.getAttribute('data-src'));last=document.activeElement;d.hidden=false;x.focus()}
   function close(){d.hidden=true;if(last&&last.focus)last.focus()}
   b.addEventListener('click',open);x.addEventListener('click',close);
   d.addEventListener('click',function(e){if(e.target===d)close()});
