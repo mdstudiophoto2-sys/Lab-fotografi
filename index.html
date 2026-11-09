@@ -305,6 +305,20 @@ section[hidden]{display:none}
 .installbar button{font:inherit;font-weight:600;border-radius:8px;border:1px solid var(--bg);background:var(--bg);color:var(--ink);padding:6px 12px;cursor:pointer}
 .installbar #installClose{background:transparent;color:var(--bg);border-color:transparent;font-size:18px;padding:2px 8px}
 </style>
+<style>
+.who{box-sizing:border-box;position:fixed;inset:0;z-index:50;background:var(--bg);display:grid;place-items:center;padding:24px max(16px,env(safe-area-inset-left,0px)) 24px max(16px,env(safe-area-inset-right,0px));overflow:auto}
+.whocard{box-sizing:border-box;width:100%;max-width:380px;display:flex;flex-direction:column;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px}
+.whoeye{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.whocard h2{font-family:var(--display);font-weight:800;font-size:26px;line-height:1.15;margin:0 0 6px;color:var(--ink)}
+.whocard label{font-weight:600;font-size:14px;color:var(--ink);margin-top:4px}
+.whocard input{font:inherit;font-size:16px;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.whocard input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.whocard button{margin-top:8px;font:inherit;font-weight:600;font-size:15px;padding:12px;border-radius:10px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);cursor:pointer}
+.whonote{margin:4px 0 0;font-size:12.5px;color:var(--muted)}
+.whoerr{margin:2px 0 0;font-size:13px;color:var(--accent);font-weight:600}
+.whoami{max-width:1000px;margin:0 auto;padding:8px max(16px,env(safe-area-inset-left,0px)) 20px;font-size:12.5px;color:var(--muted)}
+.whoami button{font:inherit;font-size:12.5px;background:none;border:0;padding:0;color:var(--ink);text-decoration:underline;cursor:pointer}
+</style>
 </head>
 <body>
 
@@ -1470,6 +1484,21 @@ thumbsDirty();
  show(name(),false);
 })();
 </script>
+<p class="whoami" id="whoami" hidden></p>
+
+<div id="who" class="who" role="dialog" aria-modal="true" aria-labelledby="whoT" hidden>
+  <form id="whoForm" class="whocard" novalidate>
+    <div class="whoeye">Lab Fotografi</div>
+    <h2 id="whoT">Kenalan dulu</h2>
+    <label for="whoNama">Nama</label>
+    <input id="whoNama" name="nama" autocomplete="name" maxlength="60" required placeholder="Contoh: Rina Putri">
+    <label for="whoKelas">Kelas</label>
+    <input id="whoKelas" name="kelas" maxlength="20" required placeholder="Contoh: XI DKV 1">
+    <p class="whoerr" id="whoErr" hidden>Isi nama dan kelas dulu.</p>
+    <p class="whonote">Nama, kelas, waktu buka, dan materi yang kamu pakai dicatat untuk guru. Tidak ada data lain yang diambil.</p>
+    <button type="submit">Mulai belajar</button>
+  </form>
+</div>
 <script>
 (function(){
   const bar=document.getElementById('installBar'),txt=document.getElementById('installText'),btn=document.getElementById('installBtn');
@@ -1484,6 +1513,75 @@ thumbsDirty();
   document.getElementById('installClose').addEventListener('click',()=>{bar.hidden=true;try{localStorage.setItem(KEY,'1')}catch(e){}});
   window.addEventListener('appinstalled',()=>{bar.hidden=true});
   if('serviceWorker' in navigator&&location.protocol!=='file:'){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+})();
+</script>
+<script>
+(function(){
+  var ON=/(^|\.)github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname);
+  if(!ON)return;
+  var URL_RPC="https://tvqxfcvrcoqipdycjhlv.supabase.co/rest/v1/rpc/lab_catat",KEY="sb_publishable_f0-LxFQvYqMH3JHHvQ8BSA_llc137cU";
+  var LS={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+  var dev=LS.get('labfoto-dev');
+  if(!dev){dev=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():('d'+Date.now().toString(36)+Math.random().toString(36).slice(2,10));LS.set('labfoto-dev',dev)}
+  var me=null;try{me=JSON.parse(LS.get('labfoto-who')||'null')}catch(e){}
+  var gate=document.getElementById('who'),form=document.getElementById('whoForm'),inN=document.getElementById('whoNama'),inK=document.getElementById('whoKelas'),err=document.getElementById('whoErr'),foot=document.getElementById('whoami');
+  var TABS=['dasar','lensa','lanjut'];
+  function tabNow(){var h=location.hash.slice(1);return TABS.indexOf(h)>=0?h:'dasar'}
+  function readQ(){try{return JSON.parse(LS.get('labfoto-q')||'[]')}catch(e){return[]}}
+  function writeQ(q){LS.set('labfoto-q',JSON.stringify(q.slice(-100)))}
+  function post(ev,keep){
+    return fetch(URL_RPC,{method:'POST',keepalive:!!keep,headers:{'Content-Type':'application/json','apikey':KEY},body:JSON.stringify(ev)})
+      .then(function(r){if(!r.ok)throw new Error('http '+r.status)});
+  }
+  var flushing=false;
+  function flush(){
+    if(flushing)return;var q=readQ();if(!q.length)return;flushing=true;
+    var ev=q[0];
+    post(ev).then(function(){var r=readQ();r.shift();writeQ(r);flushing=false;flush()}).catch(function(){flushing=false});
+  }
+  function log(peristiwa,extra,keep){
+    if(!me)return;
+    var ev={p_perangkat:dev,p_nama:me.nama,p_kelas:me.kelas,p_peristiwa:peristiwa,p_tab:tabNow(),p_durasi:null,p_waktu:new Date().toISOString()};
+    if(extra)for(var k in extra)ev[k]=extra[k];
+    if(navigator.onLine===false){var q=readQ();q.push(ev);writeQ(q);return}
+    post(ev,keep).then(flush).catch(function(){var q=readQ();q.push(ev);writeQ(q)});
+  }
+  var lastTab=null,shownAt=0,hiddenAt=0,started=false;
+  function showFoot(){
+    foot.textContent='';foot.append('Masuk sebagai ');var b=document.createElement('b');b.textContent=me.nama+' ('+me.kelas+')';foot.append(b,' · ');
+    var c=document.createElement('button');c.type='button';c.textContent='Bukan kamu? Ganti nama';c.onclick=openGate;foot.append(c);foot.hidden=false;
+  }
+  function start(){
+    if(started)return;started=true;
+    showFoot();lastTab=tabNow();shownAt=Date.now();log('buka');
+  }
+  function openGate(){
+    inN.value=me?me.nama:'';inK.value=me?me.kelas:'';err.hidden=true;gate.hidden=false;
+    setTimeout(function(){inN.focus()},50);
+  }
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var n=inN.value.replace(/\s+/g,' ').trim(),k=inK.value.replace(/\s+/g,' ').trim();
+    if(n.length<2||!k){err.hidden=false;(n.length<2?inN:inK).focus();return}
+    var changed=!me||me.nama!==n||me.kelas!==k;
+    if(me&&changed&&started){endSession(false)}
+    me={nama:n,kelas:k};LS.set('labfoto-who',JSON.stringify(me));gate.hidden=true;
+    if(!started)start();else{showFoot();if(changed){shownAt=Date.now();log('buka')}}
+  });
+  function endSession(keep){
+    if(!shownAt)return;var s=Math.round((Date.now()-shownAt)/1000);shownAt=0;
+    if(s>=5)log('selesai',{p_durasi:s},keep);
+  }
+  addEventListener('hashchange',function(){var t=tabNow();if(started&&t!==lastTab){lastTab=t;log('tab')}});
+  document.addEventListener('visibilitychange',function(){
+    if(!started)return;
+    if(document.visibilityState==='hidden'){hiddenAt=Date.now();endSession(true)}
+    else{var away=hiddenAt?Date.now()-hiddenAt:0;shownAt=Date.now();if(away>30*60*1000)log('buka');else flush()}
+  });
+  addEventListener('pagehide',function(){if(started)endSession(true)});
+  addEventListener('online',flush);
+  if(me)start();else openGate();
+  flush();
 })();
 </script>
 </body>
