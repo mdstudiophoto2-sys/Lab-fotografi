@@ -165,6 +165,9 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15p
 #tab-exp input[type=range]:disabled{opacity:.45}
 #tab-exp .verdict{font-family:var(--display);font-size:22px;font-weight:800}
 #tab-exp .verdict small{display:block;font-family:var(--body);font-size:13px;font-weight:400;color:var(--muted)}
+#tab-exp .verdict small.wbl{margin-top:4px;color:var(--ink)}
+#tab-exp .dial .lbl{font-weight:600}
+#tab-exp .dial .wbk{margin-top:8px;display:flex;flex-direction:column;gap:4px}
 #tab-exp .mid{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start}
 @media (max-width:760px){#tab-exp .mid{grid-template-columns:1fr}
 }
@@ -381,8 +384,8 @@ section[hidden]{display:none}
   <header>
     <div class="eyebrow">Kelas Fotografi Dasar</div>
     <h1>Kamera ini cuma bisa <em>menerangkan</em> dan <em>menggelapkan</em></h1>
-    <p class="lead">Geser tiga pengaturan di bawah, lalu lihat fotonya jadi lebih terang atau lebih gelap.</p>
-    <ol class="steps onlysimple"><li>Pilih kondisi cahaya.</li><li>Geser satu slider.</li><li>Baca hasilnya di kotak bawah slider. Tujuannya: foto yang <b>pas</b>.</li></ol>
+    <p class="lead">Tiga slider di bawah hanya membuat foto lebih terang atau lebih gelap. Warna foto diatur terpisah lewat white balance.</p>
+    <ol class="steps onlysimple"><li>Pilih kondisi cahaya.</li><li>Geser satu slider.</li><li>Pilih white balance supaya yang putih tetap putih.</li><li>Baca hasilnya di kotak bawah. Tujuannya: foto yang <b>pas</b>.</li></ol>
   </header>
 
   <section class="top">
@@ -426,6 +429,16 @@ section[hidden]{display:none}
         <input type="range" id="iso" min="0" max="7" step="1">
         <div class="hint">Angka besar = sensor lebih peka = lebih terang</div>
         <div class="fx"><span class="bars" id="bI"></span><span id="xI"></span></div>
+      </div>
+      <div class="dial" id="dWb">
+        <div class="row"><span class="lbl" id="wbLbl">White balance (warna foto)</span><span class="val" id="vW"></span></div>
+        <div class="chips" id="wb" role="group" aria-labelledby="wbLbl"></div>
+        <div class="hint">Pilih sesuai sumber cahayanya, supaya yang putih tetap putih</div>
+        <div class="adv wbk">
+          <div class="row"><label for="wbK">Atur Kelvin sendiri</label></div>
+          <input type="range" id="wbK" min="2500" max="10000" step="100">
+          <div class="hint">Angka Kelvin adalah warna cahaya yang ingin dinetralkan: lampu kuning sekitar 3200 K, matahari 5500 K, teduh 7500 K. Angka besar justru membuat foto lebih hangat, karena kamera mengira cahayanya biru lalu menambah kuning.</div>
+        </div>
       </div>
       <div class="verdict" id="verdict"></div>
     </div>
@@ -608,7 +621,8 @@ section[hidden]{display:none}
 const AP=["1.4","2","2.8","4","5.6","8","11","16","22"];
 const SH=["1/4000","1/2000","1/1000","1/500","1/250","1/125","1/60","1/30","1/15","1/8","1/4","1/2","1\""];
 const ISO=[100,200,400,800,1600,3200,6400,12800];
-const SCENES=[["Cerah",0],["Mendung",2],["Teduh",4],["Dalam ruangan",6],["Malam",10]];
+const SCENES=[["Cerah",0,5500],["Mendung",2,6500],["Teduh",4,7500],["Dalam ruangan",6,3200],["Malam",10,3200]]; // nama, EV di bawah cerah, suhu warna (K)
+const WB=[["Otomatis","auto"],["Cerah",5500],["Mendung",6500],["Teduh",7500],["Lampu",3200]];
 const BASE={ap:7,sh:5,iso:0};
 const APR=[14,10,7,5,3,1,0,0,0];            // radius blur latar per bukaan
 const LEN=[0,1,2,3,6,12,25,50,100,187,220,220,220]; // panjang kabur gerak (px) per shutter
@@ -616,7 +630,7 @@ const NOISE=[0,0.004,0.009,0.016,0.028,0.045,0.07,0.1];
 const APFX=[[4,"Latar sangat blur, area tajam tipis"],[4,"Latar sangat blur"],[3,"Latar blur"],[2,"Latar agak blur"],[1,"Latar sedikit blur"],[1,"Hampir semua tajam"],[0,"Semua tajam"],[0,"Semua tajam, cocok lanskap"],[0,"Semua tajam"]];
 const SHFX=[[0,"Gerakan beku total"],[0,"Gerakan beku total"],[0,"Gerakan beku total"],[0,"Gerakan beku total"],[0,"Gerakan beku"],[0,"Gerakan beku"],[1,"Sedikit kabur"],[2,"Kabur, tangan mulai goyang"],[3,"Kabur, pakai tripod"],[4,"Kabur panjang, wajib tripod"],[4,"Kabur panjang, wajib tripod"],[4,"Kabur panjang, wajib tripod"],[4,"Kabur panjang, wajib tripod"]];
 const ISOFX=[[0,"Bersih"],[0,"Bersih"],[1,"Hampir bersih"],[1,"Noise halus"],[2,"Noise terlihat"],[3,"Noise jelas"],[4,"Noise kasar"],[4,"Noise sangat kasar"]];
-const st={ap:7,sh:5,iso:0,scene:3,mode:"m",comp:0};
+const st={ap:7,sh:5,iso:0,scene:3,mode:"m",comp:0,wb:"auto"};
 const $=id=>document.getElementById(id);
 const W=600,H=400;
 
@@ -725,6 +739,7 @@ function compose(p,ctx,sx,sy,sw,sh){
   const img=ctx.createImageData(ow,oh),o=img.data;
   const far=blurred("far",p.r),fore=blurred("fore",p.r),mid=LAY.mid,car=p.L>0?motion(p.L):LAY.car;
   const m=Math.pow(2,p.stops),sig=NOISE[p.iso];
+  const gR=p.gain?p.gain[0]:1,gG=p.gain?p.gain[1]:1,gB=p.gain?p.gain[2]:1;
   let q=0;
   for(let y=0;y<oh;y++){
     const yy=sy+y*step;
@@ -734,7 +749,7 @@ function compose(p,ctx,sx,sy,sw,sh){
       r=mid[i]+r*k;g=mid[i+1]+g*k;b=mid[i+2]+b*k;
       a=car[i+3];k=1-a;r=car[i]+r*k;g=car[i+1]+g*k;b=car[i+2]+b*k;
       a=fore[i+3];k=1-a;r=fore[i]+r*k;g=fore[i+1]+g*k;b=fore[i+2]+b*k;
-      let R=enc(r*m),G=enc(g*m),B=enc(b*m);
+      let R=enc(r*m*gR),G=enc(g*m*gG),B=enc(b*m*gB);
       if(sig>0){
         const amp=sig*(1.3-(R+G+B)/3),n=NL[pi]*amp,c=amp*0.5;
         R+=n+NC[pi*3]*c;G+=n+NC[pi*3+1]*c;B+=n+NC[pi*3+2]*c;
@@ -760,6 +775,36 @@ function verdictFor(s){
   if(s<4)return["Terlalu terang","Kelebihan "+s+" stop, langit mulai putih. Geser salah satu slider ke arah lebih gelap."];
   return["Hampir putih","Buat lebih gelap: bukaan angka besar, shutter lebih cepat, atau ISO lebih kecil."];
 }
+/* ---------- white balance ---------- */
+// Warna cahaya dari suhu (perkiraan Tanner Helland), diubah ke linear.
+function kelvinRGB(K){
+  const t=K/100;
+  const r=t<=66?255:329.698727446*Math.pow(t-60,-0.1332047592);
+  const g=t<=66?99.4708025861*Math.log(t)-161.1195681661:288.1221695283*Math.pow(t-60,-0.0755148492);
+  const b=t>=66?255:(t<=19?0:138.5177312231*Math.log(t-10)-305.0447927307);
+  return [r,g,b].map(v=>Math.pow(clamp(v,0,255)/255,2.2));
+}
+// Gambar dasar dianggap sudah netral. Cahaya sceneK difoto dengan setelan wbK:
+// tiap kanal dikali rasio, dilunakkan sedikit, lalu terang rata-ratanya dikembalikan.
+const WB_STRENGTH=0.8;
+function wbGain(sceneK,wbK){
+  const s=kelvinRGB(sceneK),w=kelvinRGB(wbK);
+  const g=s.map((v,i)=>Math.pow(v/w[i],WB_STRENGTH));
+  const lum=0.2126*g[0]+0.7152*g[1]+0.0722*g[2];
+  return g.map(v=>v/lum);
+}
+const sceneK=()=>SCENES[st.scene][2];
+const wbK=()=>st.wb==="auto"?clamp(sceneK(),3800,7000):st.wb; // Otomatis tidak sanggup penuh di bawah lampu kuning
+const mired=K=>1e6/K;
+function wbVerdict(){
+  const M=mired(sceneK())-mired(wbK());
+  if(Math.abs(M)<20)return "Warna pas: yang putih tetap putih.";
+  const sug=WB.slice(1).reduce((a,b)=>Math.abs(mired(b[1])-mired(sceneK()))<Math.abs(mired(a[1])-mired(sceneK()))?b:a);
+  const arah=M>0?"kuning":"biru",kuat=Math.abs(M)<60?"agak ":"terlalu ";
+  const pas=st.wb===sug[1];
+  return "Warna "+kuat+arah+". "+(pas?"Geser Kelvin mendekati "+sceneK()+" K.":(Math.abs(M)<60?"Coba":"Pilih")+" white balance "+sug[0]+".");
+}
+
 const MODES=[["m","M · Manual",null],["autoiso","Auto ISO","iso"],["av","A · Prioritas bukaan","sh"],["tv","S · Prioritas shutter","ap"]];
 function autoSolve(){
   const T=st.comp,s=sc();
@@ -786,6 +831,9 @@ for(let k=-2;k<=2;k++){
   f.onclick=()=>{if(st.mode==="m")st.iso=clamp(st.iso+k,0,7);else st.comp=clamp(st.comp+k,-3,3);update()};
   coll.appendChild(f);frames.push({k,ctx:c.getContext("2d"),l});
 }
+const wbBox=$("wb");
+WB.forEach((w,i)=>{const b=document.createElement("button");b.type="button";b.id="wb"+i;b.textContent=w[0];b.onclick=()=>{st.wb=w[1];update()};wbBox.appendChild(b)});
+$("wbK").addEventListener("input",e=>{st.wb=+e.target.value;update()});
 ["ap","sh","iso"].forEach(k=>$(k).addEventListener("input",e=>{st[k]=+e.target.value;update()}));
 $("comp").addEventListener("input",e=>{st.comp=+e.target.value;update()});
 
@@ -803,8 +851,11 @@ function update(){
   $("vA").textContent=a;$("vS").textContent=s;$("vI").textContent=i;
   $("hA").textContent=a;$("hS").textContent=s;$("hI").textContent=i;
   setFx("bA","xA",APFX[st.ap]);setFx("bS","xS",SHFX[st.sh]);setFx("bI","xI",ISOFX[st.iso]);
+  WB.forEach((w,j)=>$("wb"+j).setAttribute("aria-pressed",w[1]===st.wb));
+  $("vW").textContent=st.wb==="auto"?"Otomatis":st.wb+" K";
+  $("wbK").value=wbK();
   const t=totalOf();
-  const P={r:APR[st.ap],L:LEN[st.sh],iso:st.iso,stops:t};
+  const P={r:APR[st.ap],L:LEN[st.sh],iso:st.iso,stops:t,gain:wbGain(sceneK(),wbK())};
   compose(P,view,...FULL);
   $("tA").textContent=fmt(-(st.ap-BASE.ap))+" stop";
   $("tS").textContent=fmt(st.sh-BASE.sh)+" stop";
@@ -812,10 +863,10 @@ function update(){
   $("tT").textContent=fmt(t)+" EV";
   const col=t===0?"var(--ok)":Math.abs(t)<=1?"var(--warn)":"var(--accent)";
   $("tT").style.fill=col;
-  const v=verdictFor(t);$("verdict").innerHTML=v[0]+"<small>"+v[1]+"</small>";
+  const v=verdictFor(t);$("verdict").innerHTML=v[0]+"<small>"+v[1]+"</small><small class=\"wbl\">"+wbVerdict()+"</small>";
   $("verdict").style.color=col;
   [...meter.children].forEach((el,j)=>el.classList.toggle("on",j-3===clamp(t,-3,3)));
-  frames.forEach(f=>{compose({r:P.r,L:P.L,iso:P.iso,stops:t+f.k},f.ctx,...FULL);f.l.textContent=(f.k===0?"Sekarang ":"")+fmt(t+f.k)+" EV"});
+  frames.forEach(f=>{compose({r:P.r,L:P.L,iso:P.iso,stops:t+f.k,gain:P.gain},f.ctx,...FULL);f.l.textContent=(f.k===0?"Sekarang ":"")+fmt(t+f.k)+" EV"});
 }
 
 /* ---------- kartu efek tiap sudut ---------- */
@@ -870,7 +921,7 @@ GOALS.forEach(gl=>{
 const wrapEl=document.querySelector(".wrap"),tg=$("modeToggle");
 function setSimple(on){
   wrapEl.classList.toggle("simple",on);
-  if(on){st.mode="m";st.comp=0}
+  if(on){st.mode="m";st.comp=0;if(!WB.some(w=>w[1]===st.wb))st.wb="auto"}
   tg.textContent=on?"Lihat penjelasan lengkap: segitiga, efek samping, mode otomatis":"Kembali ke tampilan sederhana";
   tg.setAttribute("aria-expanded",String(!on));
   update();
